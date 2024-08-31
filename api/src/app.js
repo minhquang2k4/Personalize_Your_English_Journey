@@ -1,12 +1,13 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
 import express from 'express'
 import cors from 'cors'
-import dotenv from 'dotenv'
 
 import connect from './config/database.js'
 import router from './routes/index.js'
 
 const app = express()
-dotenv.config()
 
 const PORT = process.env.PORT
 const MONGODB_URL = process.env.MONGODB_URL
