@@ -98,7 +98,7 @@ const Register = () => {
       <Typography
         variant='h4'
         component='h1'
-        color='primary' 
+        color='secondary' 
         sx={{
           position: 'absolute',
           top: '50px',
@@ -146,7 +146,7 @@ const Register = () => {
         <Grid size={12} container justifyContent='center'>
           <Button
             variant="contained"
-            color="primary"
+            color="secondary"
             sx={{
               padding: '10px',
               width: '40%',

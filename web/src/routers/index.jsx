@@ -1,10 +1,11 @@
 import { Navigate } from 'react-router-dom'
 
 import MainLayout from '../layouts/mainLayout'
+
 import Login from '../pages/loginPage'
 import Register from '../pages/registerPage'
-
 import Home from '../pages/homePage'
+import TopicsPage from '../pages/TopicsPage'
 
 export const routes = [
   {
@@ -18,7 +19,12 @@ export const routes = [
       {
         path: 'home',
         element: <Home />
+      },
+      {
+        path: 'topics',
+        element: <TopicsPage />
       }
+
     ]
   },
   {
