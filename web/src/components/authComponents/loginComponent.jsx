@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+// import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import { Link, useNavigate } from 'react-router-dom'
 // ACTION
-import { LOGIN } from '../../redux/slices/authSlice'
+// import { LOGIN } from '../../redux/slices/authSlice'
 // MUI
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -14,11 +14,12 @@ import Button from '@mui/material/Button'
 
 
 const LoginComponent = () => {
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const navigate = useNavigate()
   const API_URL = import.meta.env.VITE_API_URL
 
-  const isLogin = useSelector((state) => state.auth.isLogin)
+  // const isLogin = useSelector((state) => state.auth.isLogin)
+  const isLogin = localStorage.getItem('islogin')
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -48,7 +49,9 @@ const LoginComponent = () => {
       
       if (response.status === 201) {
         Cookies.set('token', response.data.token)
-        dispatch(LOGIN(response.data.user))
+        // dispatch(LOGIN(response.data.user))
+        localStorage.setItem('userName', JSON.stringify(response.data.user.userName))
+        localStorage.setItem('islogin', true)
         alert('Đăng nhập thành công!')
         navigate('/home')
       } else {
@@ -96,7 +99,7 @@ const LoginComponent = () => {
       <Typography
         variant='h4'
         component='h1'
-        color='secondary' 
+        color='primary' 
         sx={{
           position: 'absolute',
           top: '50px',
@@ -124,7 +127,7 @@ const LoginComponent = () => {
         <Grid size={12} container justifyContent='center'>
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             sx={{
               padding: '10px',
               width: '40%',
@@ -147,7 +150,7 @@ const LoginComponent = () => {
           textAlign: 'center'
         }}
       >
-        Chưa có tài khoản? <Link to='/register' style={{ color: '#3f51b5' }}>Đăng ký ngay</Link>
+        Chưa có tài khoản? <Link to='/auth/register' style={{ color: '#3f51b5' }}>Đăng ký ngay</Link>
       </Typography>
     </Box>
   )

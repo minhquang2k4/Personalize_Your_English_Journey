@@ -3,8 +3,6 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout'
 import { Outlet, useNavigate } from 'react-router-dom'
 
 import theme from '../theme'
-// import logo from '../assets/Logo.png'
-import logo2 from '../assets/Logo2.png'
 
 import HomeIcon from '@mui/icons-material/Home'
 import TopicIcon from '@mui/icons-material/Topic'
@@ -29,7 +27,7 @@ function DashboardLayoutBasic() {
     {
       segment: 'home',
       title: 'Trang Chủ',
-      icon: <HomeIcon color='primary' />
+      icon: <HomeIcon />
     },
     {
       kind: 'divider'
@@ -149,8 +147,8 @@ function DashboardLayoutBasic() {
       theme={theme}
       router={router}
       branding={{
-        logo: <img src={logo2} alt="MUI logo" />,
-        title: ''
+        logo: <img src="https://mui.com/static/logo.png" alt="MUI logo" />,
+        title: 'Personalize Your English Journey'
       }}
     >
       <DashboardLayout>
