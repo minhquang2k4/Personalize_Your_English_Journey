@@ -1,5 +1,5 @@
-import globals from "globals";
-import pluginJs from "@eslint/js";
+import globals from "globals"
+import pluginJs from "@eslint/js"
 
 
 export default [
@@ -22,7 +22,7 @@ export default [
       'object-curly-spacing': [1, 'always'], // dấu cách sau dấu ngoặc mở
       'indent': ['warn', 2], // 2 khoảng trắng
       'semi': [1, 'never'], // không có dấu chấm phẩy
-      'quotes': ['error', 'single'], // dấu nháy đơn
+      // 'quotes': ['error', 'single'], // dấu nháy đơn
       'array-bracket-spacing': 1, // dấu cách sau dấu ngoặc mở
       'linebreak-style': 0, // không kiểm tra dấu xuống dòng
       'no-unexpected-multiline': 'warn', // không có xuống dòng không mong muốn
@@ -31,5 +31,5 @@ export default [
       'comma-spacing': 1, // dấu cách sau dấu phẩy
       'arrow-spacing': 1 // dấu cách trước và sau dấu mũi tên
     }
-  },
-];
+  }
+]

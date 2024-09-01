@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+// import { useSelector } from 'react-redux'
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 // MUI
@@ -9,8 +9,9 @@ import Grid from '@mui/material/Grid2'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 
-const Register = () => {
-  const isLogin = useSelector((state) => state.auth.isLogin)
+const RegisterComponent = () => {
+  // const isLogin = useSelector((state) => state.auth.isLogin)
+  const isLogin = localStorage.getItem('islogin')
   const navigate = useNavigate()
   
   const API_URL = import.meta.env.VITE_API_URL
@@ -169,10 +170,10 @@ const Register = () => {
           textAlign: 'center'
         }}
       >
-        Đã có tài khoản? <Link to='/login' style={{ color: '#3f51b5' }}>Đăng nhập</Link>
+        Đã có tài khoản? <Link to='/auth/login' style={{ color: '#3f51b5' }}>Đăng nhập</Link>
       </Typography>
     </Box>
   )
 }
 
-export default Register
+export default RegisterComponent
