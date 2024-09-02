@@ -7,12 +7,18 @@ const userSchema = new mongoose.Schema({
   },
   email: { 
     type: String, 
-    required: true 
+    required: true,
+    unique: true
   },
   password: { 
     type: String, 
     required: true 
-  }
+  },
+  topicIDs:[
+    {
+      type: mongoose.Schema.Types.ObjectId
+    }
+  ]
 })
 
 const User = mongoose.model('User', userSchema)

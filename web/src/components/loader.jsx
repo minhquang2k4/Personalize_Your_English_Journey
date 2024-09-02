@@ -1,19 +1,42 @@
 // material-ui
 import LinearProgress from '@mui/material/LinearProgress'
 import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
 
 const Loader = () => (
-  <Box sx={{ 
-    position: 'fixed', 
-    top: '50%', 
-    left: '50%', 
-    transform: 'translate(-50%, -50%)', 
-    zIndex: 1301, 
-    width: '30%' }}>
-    <Box sx={{ margin: 'auto', textAlign: 'center' }} >
-      <h1>Đang tạo dữ liệu</h1>
+  <Box
+    sx={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+      zIndex: 1301,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}
+  >
+    <Box
+      sx={{
+        width: '40%',
+        backgroundColor: 'white',
+        padding: '20px',
+        borderRadius: '8px',
+        boxShadow: 24,
+        textAlign: 'center'
+      }}
+    >
+      <Typography 
+        variant='h4'
+        component='h1'
+        sx={{
+          margin: '30px 0'
+        }}
+      >Đang tạo dữ liệu</Typography>
+      <LinearProgress color="primary" sx={{ margin: '30px' }} />
     </Box>
-    <LinearProgress color="primary" size="lg" />
   </Box>
 )
 

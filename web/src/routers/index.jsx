@@ -5,8 +5,9 @@ import MainLayout from '../layouts/MainLayout'
 import LoginPage from '../pages/loginPage'
 import RegisterPage from '../pages/registerPage'
 import HomePage from '../pages/homePage'
-import TopicsPage from '../pages/TopicsPage'
+import NewTopicPage from '../pages/NewTopicPage'
 import AccountPage from '../pages/AccountPage'
+import YourTopicPage from '../pages/YourTopicPage'
 
 export const routes = [
   {
@@ -22,8 +23,12 @@ export const routes = [
         element: <HomePage />
       },
       {
-        path: 'topics',
-        element: <TopicsPage />
+        path: 'topics/newtopic',
+        element: <NewTopicPage />
+      },
+      {
+        path: 'topics/yourtopic',
+        element: <YourTopicPage />
       },
       {
         path: 'auth/account',

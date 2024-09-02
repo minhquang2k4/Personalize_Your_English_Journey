@@ -139,7 +139,7 @@ const RegisterComponent = () => {
         </Grid>
 
         <Grid size={12} >
-          <TextField fullWidth label='Xác nhận mật khẩu' variant='outlined' type='password' required onChange={
+          <TextField error={password !== confirmPassword} fullWidth label='Xác nhận mật khẩu' variant='outlined' type='password' required onChange={
             (e) => setConfirmPassword(e.target.value)
           }/>
         </Grid>
