@@ -265,7 +265,7 @@ export const create = async (req, res) => {
     user.topicIDs.push(newTopic._id)
     await user.save()
 
-    res.status(200).json({ message: "Create topic successfully" })
+    res.status(201).json({ topicId: newTopic._id })
 
     // async function run() {
     //   try {

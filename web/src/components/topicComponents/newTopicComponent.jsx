@@ -1,19 +1,22 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 // UI Components
 import Loader from '../loader'
+import Steper from '../stepper'
 
 import Box from '@mui/material/Box'
-// import Typography from '@mui/material/Typography'
+import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import { Button } from '@mui/material'
 
 const NewTopic = () => {
   const API_URL = import.meta.env.VITE_API_URL
   const navigate = useNavigate()
+  const isLogin = localStorage.getItem('islogin')
+  const userName = isLogin ? localStorage.getItem('userName').slice(1, -1) : 'Bạn mới'
 
   const [topicName, setTopicName] = useState('')
   const [error, setError] = useState(false)
@@ -42,8 +45,9 @@ const NewTopic = () => {
           Authorization: `Bearer ${token}`
         }
       })
-      
-      console.log('🚀 ~ handleSubmit ~ response:', response.data)
+      if (response.status === 201) {
+        navigate(`/topics/yourtopic/${response.data.topicId}`)
+      }
 
     } catch (error) {
       if (error.response.status === 401) {
@@ -64,14 +68,26 @@ const NewTopic = () => {
   }
 
   return (
-    <Box>
+    <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '80px'
+    }} >
       { loading && <Loader /> }
+
+      {/* title */}
+      <Typography variant='h5' component='div' sx={{
+        textAlign: 'center',
+        marginTop: '50px',
+        marginBottom: '20px'
+      }}> Xin chào <b>{userName}</b>. Bạn đang muốn tạo chủ đề mới? </Typography>
+
       {/* work flow */}
-      <Box>
-        work flow
-      </Box>
+      <Steper step={0} />
+
       {/* tao chu de */}
       <Box sx={{
+        marginTop: '40px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -87,15 +103,20 @@ const NewTopic = () => {
         <Button variant="contained" 
           onClick={handleSubmit}
           sx={{
-            width: '120px',
+            width: '140px',
             height: '45px',
             borderRadius: '100px',
-            backgroundColor: '#FFC107',
+            backgroundColor: '#FFD700',
+            transition: 'all 0.3s ease',
             color: '#000000',
             '&:hover': {
-              backgroundColor: '#FFA000'
+              backgroundColor: '#FFA000',
+              color: 'black', // Giữ nguyên màu chữ khi hover
+              content: '"+"', // Chữ hiển thị khi hover
+              transform: 'scale(1.05)'
             }
-          }}>Tạo Chủ Đề</Button>
+          }}> Tạo Chủ Đề</Button>
+
       </Box>
     </Box>
   )
