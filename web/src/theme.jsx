@@ -4,6 +4,7 @@ import { createTheme } from '@mui/material/styles'
 //primary, secondary, inherit, default, error, info, success, và warning.
 const theme = createTheme({
   palette: {
+    mode: 'light'
   },
   cssVariables: {
     colorSchemeSelector: 'data-toolpad-color-scheme'
