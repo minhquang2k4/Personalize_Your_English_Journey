@@ -10,6 +10,43 @@ dotenv.config()
 
 const API_KEY = process.env.API_KEY
 
+export const getAll = async (req, res) => {
+  try {
+    const email = req.user.email
+
+    const user = await UserModel.findOne({ email }).populate('topicIDs')
+  
+    // populate sẽ thay thế các topicId bằng thông tin chi tiết của topic (dựa trên ref: 'Topic')
+    const topics = user.topicIDs
+    return res.status(200).json({ topics }) 
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+  }
+}
+
+export const getDetail = async (req, res) => {
+  try {
+    const topicId = req.params.id
+    const topic = await TopicModel.findOne({ _id: topicId }).populate('vocabularyIDs').populate('conversationIDs').populate('questionIDs')
+    console.log("🚀 ~ getDetail ~ topic:", topic)
+    return res.status(200).json({ topic })
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+  }
+}
+
+export const getVocabulary = async (req, res) => {
+  try {
+    const topicId = req.params.id
+    const topic = await TopicModel.findOne({ _id: topicId }).populate('vocabularyIDs')
+    const vocabularies = topic.vocabularyIDs
+    
+    return res.status(200).json({ vocabularies })
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+  }
+}
+
 export const create = async (req, res) => {
   try {
     const genAI = new GoogleGenerativeAI(API_KEY)
@@ -81,6 +118,14 @@ export const create = async (req, res) => {
           "part_of_speech": "noun",
           "example": "The truck is carrying goods",
           "translate": "Xe tải đang chở hàng hóa"
+        },
+        {
+          "word": "sedan",
+          "pronunciation": "/sɪˈdæn/",
+          "meaning": "xe sedan",
+          "part_of_speech": "noun",
+          "example": "The sedan is parked in front of the house",
+          "translate": "Xe sedan được đậu trước nhà"
         }
       ]
     }
@@ -101,6 +146,11 @@ export const create = async (req, res) => {
           "name": "Alice",
           "content": "Oh, that's cool. What kind of cars are you looking at?",
           "translate": "Ồ, thật tuyệt. Bạn đang xem loại xe gì vậy?"          
+        },
+        {
+          "name": "Bob",
+          "content": "I'm looking at sports cars and SUVs.",
+          "translate": "Tôi đang xem các loại xe thể thao và SUV."
         }
       ]
     }
@@ -122,6 +172,30 @@ export const create = async (req, res) => {
           "B": "Because she needs a lot of space for her luggage",
           "C": "Because she needs a safe and spacious vehicle for her family",
           "D": "Because she wants to impress her friends"
+        },
+        {
+          "question": "What is Bob's favorite car?",
+          "correctAnswer": "A",
+          "A": "The red sports car",
+          "B": "The black SUV",
+          "C": "The blue sedan",
+          "D": "The white truck"
+        },
+        {
+          "question": "What does Alice think of the blue sedan?",
+          "correctAnswer": "D",
+          "A": "She thinks it's too small",
+          "B": "She thinks it's too expensive",
+          "C": "She thinks it's too slow",
+          "D": "She thinks it's a good choice"
+        },
+        {
+          "question": "What does Bob think of the white truck?",
+          "correctAnswer": "B",
+          "A": "He thinks it's too big",
+          "B": "He thinks it's too slow",
+          "C": "He thinks it's too expensive",
+          "D": "He thinks it's too loud"
         }
       ]
     }
@@ -143,11 +217,11 @@ export const create = async (req, res) => {
 
     // console.log("🚀 ~ create ~ msg:", msg)
 
-    const msg1= `Tạo dữ liệu khoảng 12 từ vựng về chủ đề ${topic} theo mẫu json
+    const msg1= `Tạo dữ liệu khoảng 12-15 từ vựng về chủ đề ${topic} theo mẫu json
     ${vocabularyJsonTemplate}`
     console.log("🚀 ~ create ~ msg1:", msg1)
 
-    const msg2 = `Tạo đoạn hội thoại bằng tiếng anh khoảng 12 lượt hội thoại về chủ đề ${topic} sử dụng những từ vựng ở trên theo mẫu json
+    const msg2 = `Tạo đoạn hội thoại bằng tiếng anh khoảng 15 lượt hội thoại về chủ đề ${topic} sử dụng những từ vựng ở trên theo mẫu json
     ${conversationJsonTemplate}.`
     console.log("🚀 ~ create ~ msg2:", msg2)
 
@@ -171,6 +245,7 @@ export const create = async (req, res) => {
         let jsonString1 = text1.replace(/^[^{]*\{/, '{')
         jsonString1 = jsonString1.replace(/\}[^}]*$/, '}')
         jsonObject1 = JSON.parse(jsonString1)
+        console.log("🚀 ~ run ~ jsonObject1:", jsonObject1)
       } catch (error) {
         return res.status(500).json({ message: error.message })
       }
@@ -210,15 +285,21 @@ export const create = async (req, res) => {
     }
 
     await run()
+    
+    // check data
+    // 
+    // 
 
     const user = await UserModel.findOne({ email })
 
     // create new topic
     const newTopic = new TopicModel({
       topicName: topic,
-      vocabularys: [],
-      conversation: [],
-      questions: []
+      vocabularyIDs: [],
+      conversationIDs: [],
+      questionIDs: [],
+      examIDs: [],
+      step: 1
     })
 
     // create new vocabularys
@@ -232,7 +313,7 @@ export const create = async (req, res) => {
         translate: vocabulary.translate
       })
       await newVocabulary.save()
-      newTopic.vocabularys.push(newVocabulary._id)
+      newTopic.vocabularyIDs.push(newVocabulary._id)
     }
 
     // create new conversation
@@ -243,7 +324,7 @@ export const create = async (req, res) => {
         translate: conv.translate
       })
       await newConversation.save()
-      newTopic.conversation.push(newConversation._id)
+      newTopic.conversationIDs.push(newConversation._id)
     }
 
     // create new questions
@@ -257,7 +338,7 @@ export const create = async (req, res) => {
         D: question.D
       })
       await newQuestion.save()
-      newTopic.questions.push(newQuestion._id)
+      newTopic.questionIDs.push(newQuestion._id)
     }
 
     await newTopic.save()

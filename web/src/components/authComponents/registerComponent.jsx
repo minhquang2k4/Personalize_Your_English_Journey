@@ -11,7 +11,7 @@ import Button from '@mui/material/Button'
 
 const RegisterComponent = () => {
   // const isLogin = useSelector((state) => state.auth.isLogin)
-  const isLogin = localStorage.getItem('islogin')
+  const isLogin = JSON.parse(localStorage.getItem('islogin'))
   const navigate = useNavigate()
   
   const API_URL = import.meta.env.VITE_API_URL
@@ -53,7 +53,6 @@ const RegisterComponent = () => {
       })
       
       if (response.status === 201) {
-        alert('Đăng ký thành công!')
         navigate('/login')
       } else {
         alert('Đăng ký không thành công. Vui lòng thử lại!')

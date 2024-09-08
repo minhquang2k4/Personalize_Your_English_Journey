@@ -5,21 +5,35 @@ const topicSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  vocabularys: [
+  vocabularyIDs: [
     {
-      vocabularyId: mongoose.Schema.Types.ObjectId
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Vocabulary'
     }
   ],
-  conversation: [
+  conversationIDs: [
     {
-      conversationId: mongoose.Schema.Types.ObjectId
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Conversation'
     }
   ],
-  questions: [
+  questionIDs: [
     {
-      questionId: mongoose.Schema.Types.ObjectId
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Question'
     }
-  ]
+  ],
+  examIDs: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Exam'
+    }
+  ],
+  step: {
+    // ['Tạo chủ đề', 'Luyện từ vựng', 'Luyện đoạn hội thoại', 'Hoàn thành']
+    type: Number,
+    default: 1
+  }
 })
 
 const Topic = mongoose.model('Topic', topicSchema)

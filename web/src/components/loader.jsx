@@ -34,7 +34,7 @@ const Loader = () => (
         sx={{
           margin: '30px 0'
         }}
-      >Đang tạo dữ liệu</Typography>
+      >Đang lấy dữ liệu</Typography>
       <LinearProgress color="primary" sx={{ margin: '30px' }} />
     </Box>
   </Box>

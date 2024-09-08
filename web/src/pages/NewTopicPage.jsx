@@ -5,7 +5,10 @@ import NewTopic from '../components/topicComponents/newTopicComponent.jsx'
 
 const NewTopicPage = () => {
   return (
-    <Box>
+    <Box sx={{
+      backgroundColor: '#f5f5f5',
+      padding: '13px'
+    }}>
       <NewTopic />
     </Box>
   )

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import Loader from '../loader'
 import Steper from '../stepper'
 
+// MUI
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
@@ -15,7 +16,7 @@ import { Button } from '@mui/material'
 const NewTopic = () => {
   const API_URL = import.meta.env.VITE_API_URL
   const navigate = useNavigate()
-  const isLogin = localStorage.getItem('islogin')
+  const isLogin = JSON.parse(localStorage.getItem('islogin'))
   const userName = isLogin ? localStorage.getItem('userName').slice(1, -1) : 'Bạn mới'
 
   const [topicName, setTopicName] = useState('')
@@ -38,6 +39,10 @@ const NewTopic = () => {
 
     try {
       const token = Cookies.get('token')
+      if (!token) {
+        alert('Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục')
+        navigate('/auth/login')
+      }
       const response = await axios.post(`${API_URL}/topics/create`, {
         topicName
       }, {
@@ -51,7 +56,6 @@ const NewTopic = () => {
 
     } catch (error) {
       if (error.response.status === 401) {
-        alert('Bạn chưa đăng nhập. Vui lòng đăng nhập để tiếp tục')
         navigate('/auth/login')
       }
       if (error.response.status === 403) {
@@ -71,7 +75,11 @@ const NewTopic = () => {
     <Box sx={{
       display: 'flex',
       flexDirection: 'column',
-      gap: '80px'
+      gap: '80px',
+      backgroundColor: 'white',
+      height: '90vh',
+      borderRadius: '5px',
+      boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)'
     }} >
       { loading && <Loader /> }
 
@@ -111,8 +119,6 @@ const NewTopic = () => {
             color: '#000000',
             '&:hover': {
               backgroundColor: '#FFA000',
-              color: 'black', // Giữ nguyên màu chữ khi hover
-              content: '"+"', // Chữ hiển thị khi hover
               transform: 'scale(1.05)'
             }
           }}> Tạo Chủ Đề</Button>

@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { AppProvider } from '@toolpad/core/AppProvider'
 import { DashboardLayout } from '@toolpad/core/DashboardLayout'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 import theme from '../theme'
 // import logo from '../assets/Logo.png'
@@ -17,10 +17,31 @@ import AppRegistrationIcon from '@mui/icons-material/AppRegistration'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import InterestsIcon from '@mui/icons-material/Interests'
 
-function DashboardLayoutBasic() {
-  const isLogin = localStorage.getItem('islogin')
-  const [pathname, setPathname] = useState('/home')
+function MasterPage() {
+  const isLogin = JSON.parse(localStorage.getItem('islogin'))
+  // const [pathname, setPathname] = useState('/home')
+  const location = useLocation()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    // Đặt giá trị mặc định cho 'mui-toolpad-mode' là 'light'
+    localStorage.setItem('mui-toolpad-mode', 'light')
+
+    const handleStorageChange = (event) => {
+      if (event.key === 'mui-toolpad-mode' && event.newValue === 'dark') {
+        localStorage.setItem('mui-toolpad-mode', 'light')
+      }
+    }
+
+    // Thêm sự kiện lắng nghe 'storage'
+    window.addEventListener('storage', handleStorageChange)
+
+    // Cleanup sự kiện lắng nghe khi component unmount
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+    }
+  }, [])
+
 
   const NAVIGATION1 = [
     {
@@ -146,16 +167,12 @@ function DashboardLayoutBasic() {
 
   const router = useMemo(() => {
     return {
-      pathname,
-      searchParams: new URLSearchParams(),
-      navigate: (path) => setPathname(String(path))
+      pathname: location.pathname, 
+      searchParams: new URLSearchParams(location.search),
+      navigate: (path) => navigate(path)
     }
-  }, [pathname])
+  }, [location, navigate])
 
-  useEffect(() => {    
-    navigate(pathname)
-  }, [pathname, navigate])
-  
   return (
     <AppProvider
       navigation={NAVIGATION}
@@ -173,4 +190,4 @@ function DashboardLayoutBasic() {
   )
 }
 
-export default DashboardLayoutBasic
+export default MasterPage

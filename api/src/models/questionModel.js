@@ -7,6 +7,9 @@ const questionSchema = new mongoose.Schema({
   correctAnswer: {
     type: String
   },
+  selectedAnswer: {
+    type: String
+  },
   A: {
     type: String
   },

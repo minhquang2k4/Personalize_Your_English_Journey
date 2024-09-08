@@ -19,7 +19,7 @@ const LoginComponent = () => {
   const API_URL = import.meta.env.VITE_API_URL
 
   // const isLogin = useSelector((state) => state.auth.isLogin)
-  const isLogin = localStorage.getItem('islogin')
+  const isLogin = JSON.parse(localStorage.getItem('islogin'))
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -51,8 +51,7 @@ const LoginComponent = () => {
         Cookies.set('token', response.data.token)
         // dispatch(LOGIN(response.data.user))
         localStorage.setItem('userName', JSON.stringify(response.data.user.userName))
-        localStorage.setItem('islogin', true)
-        alert('Đăng nhập thành công!')
+        localStorage.setItem('islogin', JSON.stringify(true))
         navigate('/home')
       } else {
         alert('Đăng nhập không thành công. Vui lòng thử lại!')

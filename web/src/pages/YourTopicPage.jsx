@@ -1,9 +1,18 @@
+import { Box } from '@mui/material'
+import YourTopicComponent from '../components/topicComponents/yourTopicComponent'
 
 const YourTopicPage = () => {
   return (
-    <div>
-      <h1>YourTopic</h1>
-    </div>
+    <Box sx={{
+      width: '100%',
+      height: '95.3%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#f5f5f5'
+    }}>
+      <YourTopicComponent />
+    </Box>
   )
 }
 
