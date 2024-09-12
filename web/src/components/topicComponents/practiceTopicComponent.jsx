@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 // MUI
 import Typography from '@mui/material/Typography'
@@ -37,6 +37,8 @@ export default function PracticeTopicComponent() {
 
   const [value, setValue] = useState('1')
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
@@ -46,13 +48,23 @@ export default function PracticeTopicComponent() {
             Authorization: `Bearer ${Cookies.get('token')}`
           }
         })
+        console.log(response.data.vocabularies)
         const firstVocab = response.data.vocabularies[0]
         setVocabularies(response.data.vocabularies)
         setFlashcard({ word: firstVocab.word, meaning: firstVocab.meaning, flipped: false })
         setQuestion({ word: firstVocab.word, meaning: firstVocab.meaning })
       }
       catch (error) {
-        console.error(error)
+        if (error.response.status === 401) {
+          navigate('/auth/login')
+        }
+        if (error.response.status === 403) {
+          alert('Sai Token, Vui lòng đăng nhập lại')
+          navigate('/auth/login')
+        }
+        if (error.response.status === 500) {
+          alert('Lỗi sever. Vui lòng thử lại sau')
+        }
       }
       setLoading(false)
     }
@@ -125,7 +137,6 @@ export default function PracticeTopicComponent() {
   
   const handleQuestion = async (index) => {
     if (answers[index].correct) {
-          
       setAnswers(answers.map((answer, i) => {
         if (i === index) {
           return { ...answer, color: '#81c784' }
@@ -137,6 +148,7 @@ export default function PracticeTopicComponent() {
 
       const currentIndex = vocabularies.findIndex((vocab) => vocab.word === question.word)
       if (currentIndex === vocabularies.length - 1) {
+        alert('Kết thúc')
         return
       }
       const nextVocab = vocabularies[currentIndex + 1]
@@ -326,54 +338,6 @@ export default function PracticeTopicComponent() {
                   {answer.meaning}
                 </Button>
               ))}
-              {/* <Button
-                variant="outlined"
-                sx={{ 
-                  padding: '10px 30px',
-                  // backgroundColor: 
-                }}
-                onClick={() => { 
-                  handleQuestion(0)
-                } }
-              >
-                {answers[0].meaning}
-              </Button>
-              <Button
-                variant="outlined"
-                sx={{ 
-                  padding: '10px 30px',
-                  // backgroundColor: 
-                }}
-                onClick={(e) => { 
-                  handleQuestion(1)
-                } }
-              >
-                {answers[1].meaning}
-              </Button>
-              <Button
-                variant="outlined"
-                sx={{ 
-                  padding: '10px 30px',
-                  // backgroundColor: 
-                }}
-                onClick={(e) => { 
-                  handleQuestion(2)
-                } }
-              >
-                {answers[2].meaning}
-              </Button>
-              <Button
-                variant="outlined"
-                sx={{ 
-                  padding: '10px 30px',
-                  // backgroundColor: 
-                }}
-                onClick={(e) => { 
-                  handleQuestion(3)
-                } }
-              >
-                {answers[3].meaning}
-              </Button> */}
             </Box>
           </Box>
         </TabPanel>

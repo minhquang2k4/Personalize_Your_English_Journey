@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Loader from '../loader'
 import Steper from '../stepper'
 import Modal from '../modal'
+import AddVoca from '../addVoca'
 
 import Paper from '@mui/material/Paper'
 import Table from '@mui/material/Table'
@@ -37,6 +38,7 @@ export default function DetailTopicComponent() {
   const [step, setStep] = useState(1)
   const [open, setOpen] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null)
+  const [openAddVoca, setOpenAddVoca] = useState(false)
 
   const handleChangePage = ( newPage) => {
     setPage(newPage)
@@ -87,6 +89,9 @@ export default function DetailTopicComponent() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const handleAddVoca = () => {
+    setOpenAddVoca(true)
+  }
 
   return (
     <Box sx={{
@@ -108,20 +113,25 @@ export default function DetailTopicComponent() {
         <Steper step={step}/>
       </Box>
 
+      <AddVoca open={openAddVoca} setOpen={setOpenAddVoca} />
       <Box sx={{
         width: '100%',
         display: 'flex',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        gap: '10px',
-        marginTop: '-18px'
+        marginTop: '-20px'
       }}>
-        <Button onClick={() => navigate(`/topics/yourtopic/${id}/practice`)}>
-          Luyện tập
+        <Button onClick={() => { handleAddVoca() } }>
+          Thêm từ
         </Button>
-        <Button onClick={() => navigate(`/topics/yourtopic/${id}/exam`)}>
-          Kiểm tra
-        </Button>
+        <Box>
+          <Button onClick={() => navigate(`/topics/yourtopic/${id}/practice`)}>
+            Luyện tập
+          </Button>
+          <Button onClick={() => navigate(`/topics/yourtopic/${id}/exam`)}>
+            Kiểm tra
+          </Button>
+        </Box>
       </Box>
       <Modal open={open} setOpen={setOpen} data={selectedRow} />
       <Paper sx={{ width: '100%', overflow: 'auto', boxShadow: '0px -1px 6px rgba(0, 0, 0, 0.1)' }}>

@@ -3,9 +3,11 @@ import TopicModel from '../models/topicModel.js'
 import VocabularyModel from '../models/vocabularyModel.js'
 import ConversationModel from '../models/conversationModel.js'
 import QuestionModel from '../models/questionModel.js'
+import ExamModel from '../models/examModel.js'
 
 import { GoogleGenerativeAI } from '@google/generative-ai' 
 import dotenv from 'dotenv'
+import e from 'cors'
 dotenv.config()
 
 const API_KEY = process.env.API_KEY
@@ -50,43 +52,9 @@ export const getVocabulary = async (req, res) => {
 export const create = async (req, res) => {
   try {
     const genAI = new GoogleGenerativeAI(API_KEY)
-    // const dataTemplate = {
-    //   "vocabularys": [
-    //     {
-    //       "word": "attend",
-    //       "pronunciation": "/əˈtɛnd/",
-    //       "meaning": "tham gia",
-    //       "part_of_speech": "verb",
-    //       "example": "I will attend the meeting tomorrow", 
-    //       "translate": "Tôi sẽ tham gia cuộc họp ngày mai"
-    //     }
-    //   ],
-    //   "conversation": [
-    //     {
-    //       "name": "Nancy",
-    //       "content": "Hello, I'm Nancy. What's your name?",
-    //       "translate": "Xin chào, tôi là Nancy. Bạn tên gì?"
-    //     },
-    //     {
-    //       "name": "John",
-    //       "content": "Hi, I'm John. Nice to meet you.",
-    //       "translate": "Chào, tôi là John. Rất vui được gặp bạn."
-    //     }
-    //   ],
-    //   "questions": [
-    //     {
-    //       "question": "What's your name?",
-    //       "correctAnswer": "A",
-    //       "A": "Nancy",
-    //       "B": "John",
-    //       "C": "Peter",
-    //       "D": "Marry"
-    //     }
-    //   ]
-    // }
 
     const vocabularyTemplate = {
-      "vocabularys": [
+      "vocabularies": [
         {
           "word": "motorcycle",
           "pronunciation": "/ˈmoʊtərˌsaɪkəl/",
@@ -112,20 +80,28 @@ export const create = async (req, res) => {
           "translate": "Hội nghị sẽ được tổ chức tại khách sạn"
         },
         {
-          "word": "truck",
-          "pronunciation": "/trʌk/",
-          "meaning": "xe tải",
-          "part_of_speech": "noun",
-          "example": "The truck is carrying goods",
-          "translate": "Xe tải đang chở hàng hóa"
+          "word": "run",
+          "pronunciation": "/rʌn/",
+          "meaning": "chạy",
+          "part_of_speech": "verb",
+          "example": "She runs every morning to stay fit.",
+          "translate": "Cô ấy chạy mỗi sáng để giữ dáng."
         },
         {
-          "word": "sedan",
-          "pronunciation": "/sɪˈdæn/",
-          "meaning": "xe sedan",
-          "part_of_speech": "noun",
-          "example": "The sedan is parked in front of the house",
-          "translate": "Xe sedan được đậu trước nhà"
+          "word": "eat",
+          "pronunciation": "/iːt/",
+          "meaning": "ăn",
+          "part_of_speech": "verb",
+          "example": "We eat dinner at 7 PM every day.",
+          "translate": "Chúng tôi ăn tối lúc 7 giờ mỗi ngày."
+        },
+        {
+          "word": "beautiful",
+          "pronunciation": "/ˈbjuːtɪfəl/",
+          "meaning": "đẹp",
+          "part_of_speech": "adjective",
+          "example": "The garden is beautiful in the spring.",
+          "translate": "Khu vườn rất đẹp vào mùa xuân."
         }
       ]
     }
@@ -217,11 +193,11 @@ export const create = async (req, res) => {
 
     // console.log("🚀 ~ create ~ msg:", msg)
 
-    const msg1= `Tạo dữ liệu khoảng 12-15 từ vựng về chủ đề ${topic} theo mẫu json
+    const msg1= `Tạo dữ liệu khoảng 20 từ vựng về chủ đề ${topic} theo mẫu json (phải đầy đủ tất cả các trường thông tin)
     ${vocabularyJsonTemplate}`
     console.log("🚀 ~ create ~ msg1:", msg1)
 
-    const msg2 = `Tạo đoạn hội thoại bằng tiếng anh khoảng 15 lượt hội thoại về chủ đề ${topic} sử dụng những từ vựng ở trên theo mẫu json
+    const msg2 = `Tạo đoạn hội thoại bằng tiếng anh khoảng 15 lượt hội thoại về chủ đề ${topic} sử dụng những từ vựng ở trên theo mẫu json (phải đầy đủ tât cả các trường thông tin và thay đổi name khác)
     ${conversationJsonTemplate}.`
     console.log("🚀 ~ create ~ msg2:", msg2)
 
@@ -229,7 +205,7 @@ export const create = async (req, res) => {
     ${questionJsonTemplate}`
     console.log("🚀 ~ create ~ msg3:", msg3)
 
-    let vocabularys = []
+    let vocabularies = []
     let conversation = []
     let questions = []
 
@@ -245,13 +221,14 @@ export const create = async (req, res) => {
         let jsonString1 = text1.replace(/^[^{]*\{/, '{')
         jsonString1 = jsonString1.replace(/\}[^}]*$/, '}')
         jsonObject1 = JSON.parse(jsonString1)
+        console.log("🚀 ~ run ~ jsonString1:", jsonString1)
         console.log("🚀 ~ run ~ jsonObject1:", jsonObject1)
       } catch (error) {
         return res.status(500).json({ message: error.message })
       }
 
-      vocabularys = jsonObject1.vocabularys
-      console.log("🚀 ~ run ~ vocabularys:", vocabularys)
+      vocabularies = jsonObject1.vocabularies
+      console.log("🚀 ~ run ~ vocabularies:", vocabularies)
 
       const result2 = await chat.sendMessage(msg2)
       const response2 = await result2.response
@@ -259,6 +236,7 @@ export const create = async (req, res) => {
       let jsonObject2 = {}
       try {
         let jsonString2 = text2.replace(/^[^{]*\{/, '{')
+   
         jsonString2 = jsonString2.replace(/\}[^}]*$/, '}')
         jsonObject2 = JSON.parse(jsonString2)
       } catch (error) {
@@ -302,8 +280,8 @@ export const create = async (req, res) => {
       step: 1
     })
 
-    // create new vocabularys
-    for (let vocabulary of vocabularys) {
+    // create new vocabularies
+    for (let vocabulary of vocabularies) {
       const newVocabulary = new VocabularyModel({
         word: vocabulary.word,
         pronunciation: vocabulary.pronunciation,
@@ -348,39 +326,207 @@ export const create = async (req, res) => {
 
     res.status(201).json({ topicId: newTopic._id })
 
-    // async function run() {
-    //   try {
-    //     const model = genAI.getGenerativeModel({ model: "gemini-pro" })
-    //     const chat = model.startChat()
-    //     const result = await chat.sendMessage(msg)
-    //     const response = await result.response
-    //     const text = response.text()
-    //     let jsonObject = {}
-    //     try {
-    //       let jsonString = text.replace(/^[^{]*\{/, '{')
-    //       jsonString = jsonString.replace(/\}[^}]*$/, '}')
-    //       console.log("🚀 ~ run ~ jsonString:", jsonString)
-    //       jsonObject = JSON.parse(jsonString)
-    //     } catch (error) {
-    //       return res.status(500).json({ message: error.message })
-    //     }
-        
-    //     const vocabularys = jsonObject.vocabularys
-    //     console.log("🚀 ~ run ~ vocabularys:", vocabularys)
-    //     const conversation = jsonObject.conversation
-    //     console.log("🚀 ~ run ~ conversation:", conversation)
-    //     const questions = jsonObject.questions
-    //     console.log("🚀 ~ run ~ questions:", questions)
-        
-
-    //     res.status(200).json({ vocabularys, conversation, questions })
-    //   } catch (error) {
-    //     return res.status(500).json({ message: error.message })
-    //   }
-    // }
-    // run()
   } catch (error) {
     return res.status(500).json({ message: error.message })
   }
 }
 
+export const createExam = async (req, res) => {
+  try {
+    const topicId = req.params.id
+    const vocabularies = await TopicModel.findOne({ _id: topicId }).populate('vocabularyIDs').select('vocabularyIDs')
+
+    const topic = await TopicModel.findOne({ _id: topicId })
+    let data = [] 
+    
+    for (let vocabulary of vocabularies.vocabularyIDs) {
+      data.push({
+        word: vocabulary.word,
+        meaning: vocabulary.meaning
+      })
+    }
+    
+    const dataJson = JSON.stringify(data, null, 2)
+
+    const resTemplate = `[
+      {
+        "question": "'Library' is a place where you can borrow books?",
+        "correctAnswer": "A",
+        "A": "true",
+        "B": "false"
+      },
+      {
+        "question": "Fill in the blank: He went to the ________ to mail a letter.",
+        "correctAnswer": "D",
+        "A": "library",
+        "B": "restaurant",
+        "C": "school",
+        "D": "post office"
+      },
+      {
+        "question": "What is the meaning of 'Library'?",
+        "correctAnswer": "A",
+        "A": "Thư viện",
+        "B": "Bảo tàng",
+        "C": "Nhà hàng",
+        "D": "Trường đại học"
+      },
+      {
+        "question": "'Police station' is a type of library?",
+        "correctAnswer": "B",
+        "A": "true",
+        "B": "false"
+      },
+      {
+        "question": "Fill in the blank: The children are playing in the ________.",
+        "correctAnswer": "C",
+        "A": "hospital",
+        "B": "museum",
+        "C": "park",
+        "D": "school"
+      }
+    ]`
+
+    const msg = `Dựa vào data từ vựng sau:${dataJson}.
+    Hãy tạo 1 bộ câu hỏi trắc nhiệm tiếng anh khoảng 15 câu hỏi (đầu ra ở dạng json) cho các từ vựng trên, theo các dạng câu hỏi có 4 đáp án hoặc câu hỏi true false hoặc dạng điền vào chỗ trống theo mẫu json sau: ${resTemplate}`
+   
+    console.log("🚀 ~ exam ~ msg:", msg)
+
+    const genAI = new GoogleGenerativeAI(API_KEY)
+
+    async function run() {
+      const model = genAI.getGenerativeModel({ model: "gemini-pro" })
+      const chat = model.startChat()
+
+      const result = await chat.sendMessage(msg)
+      const response = await result.response
+      const text = response.text()
+      console.log("🚀 ~ run ~ text:", text)
+      const start = text.indexOf('[')
+      const end = text.lastIndexOf(']') + 1
+      
+      let jsonString = text.substring(start, end)
+      
+      let jsonObject = JSON.parse(jsonString)
+      console.log("🚀 ~ run ~ jsonObject:", jsonObject)
+
+      const exam = new ExamModel(
+        {
+          questionIDs: [],
+          score: 0
+        }
+      )
+
+      // lưu câu hỏi vào db
+      for (let question of jsonObject) {
+        const newQuestion = new QuestionModel({
+          question: question.question,
+          correctAnswer: question.correctAnswer,
+          A: question.A,
+          B: question.B,
+          C: question.C ? question.C : '',
+          D: question.D ? question.D : ''
+        })
+        await newQuestion.save()
+        exam.questionIDs.push(newQuestion._id)
+      }
+
+      await exam.save()
+      await topic.examIDs.push(exam._id)
+      topic.save()
+
+      return res.status(200).json({ examID: exam._id })
+    }
+
+    await run()
+  }
+  catch (error) {
+    return res.status(500).json({ message: error.message })
+  }
+}
+
+export const getAllExam = async (req, res) => {
+  try {
+    const topicId = req.params.id
+    const topic = await TopicModel.findOne({ _id: topicId }).populate('examIDs').select('examIDs')
+    console.log("🚀 ~ getAllExam ~ exam:", topic)
+    return res.status(200).json({ topic })
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+  }
+}
+
+export const getExamDetail = async (req, res) => {
+  try {
+    const examId = req.params.examId
+    const exam = await ExamModel.findOne({ _id: examId }).populate('questionIDs')
+    return res.status(200).json({ exam })
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+  }
+}
+
+export const addVoca = async (req, res) => {
+  try {
+    const id = req.params.id
+    const topic = await TopicModel.findOne({ _id: id })
+
+    console.log("🚀 ~ addVoca ~ topic:", topic)
+    
+    const { word, meaning } = req.body
+    const data = `
+    {
+        "word": "${word}",
+        "pronunciation": "/.../",
+        "meaning": "${meaning}",
+        "part_of_speech": "noun/verb/adjective",
+        "example": "",
+        "translate": ""
+    }`
+
+    const msg = `Hoàn thiện thông tin từ vựng (đầy đủ thông tin các trường, trong đó ) theo mẫu json ${data}`
+
+    console.log("🚀 ~ addVoca ~ msg:", msg)
+    const genAI = new GoogleGenerativeAI(API_KEY)
+
+    async function run() {
+      const model = genAI.getGenerativeModel({ model: "gemini-pro" })
+      const chat = model.startChat()
+
+      const result = await chat.sendMessage(msg)
+      const response = await result.response
+      const text = response.text()
+      let jsonObject = {}
+      try {
+        let jsonString = text.replace(/^[^{]*\{/, '{')
+        jsonString = jsonString.replace(/\}[^}]*$/, '}')
+        jsonObject = JSON.parse(jsonString)
+        console.log("🚀 ~ run ~ jsonString1:", jsonString)
+        console.log("🚀 ~ run ~ jsonObject1:", jsonObject)
+
+        const newVocabulary = new VocabularyModel({
+          word: jsonObject.word,
+          pronunciation: jsonObject.pronunciation,
+          meaning: jsonObject.meaning,
+          part_of_speech: jsonObject.part_of_speech,
+          example: jsonObject.example,
+          translate: jsonObject.translate
+        })
+
+        await newVocabulary.save()
+        topic.vocabularyIDs.push(newVocabulary._id)
+        await topic.save()
+        return res.status(200).json({ message: 'ok' })
+
+      } catch (error) {
+        return res.status(500).json({ message: error.message })
+      }
+    }
+    
+    await run()
+
+    
+  } catch (error) {
+    return res.status(500).json({ message: error.message }) 
+  }
+}
