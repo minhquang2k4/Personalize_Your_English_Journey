@@ -6,6 +6,7 @@ export default function PracticeTopicPage() {
   return (
     <Box sx={{
       padding: '13px',
+      height: '94vh',
       backgroundColor: '#f5f5f5'
     }}>
       <PracticeTopicComponent />

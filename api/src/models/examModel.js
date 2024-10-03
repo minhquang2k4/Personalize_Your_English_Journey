@@ -7,9 +7,11 @@ const examSchema = new mongoose.Schema({
       ref: "Question"
     }
   ],
-  score: {
-    type: Number
-  }
+  score: [
+    {
+      type: Number
+    }
+  ]
 })
 
 const Exam = mongoose.model("Exam", examSchema)

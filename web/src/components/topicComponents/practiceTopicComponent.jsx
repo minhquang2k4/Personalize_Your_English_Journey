@@ -51,7 +51,7 @@ export default function PracticeTopicComponent() {
         console.log(response.data.vocabularies)
         const firstVocab = response.data.vocabularies[0]
         setVocabularies(response.data.vocabularies)
-        setFlashcard({ word: firstVocab.word, meaning: firstVocab.meaning, flipped: false })
+        setFlashcard({ word: firstVocab.word, id:firstVocab._id, meaning: firstVocab.meaning, flipped: false })
         setQuestion({ word: firstVocab.word, meaning: firstVocab.meaning })
       }
       catch (error) {
@@ -109,7 +109,7 @@ export default function PracticeTopicComponent() {
         return
       }
       const previousVocab = vocabularies[currentIndex - 1]
-      setFlashcard({ word: previousVocab.word, meaning: previousVocab.meaning, flipped: false })
+      setFlashcard({ word: previousVocab.word, id:previousVocab._id, meaning: previousVocab.meaning, flipped: false })
       setTimeout(() => setDisableAnimation(false), 0)
       setTranslate(0)
     }, 50)
@@ -125,7 +125,7 @@ export default function PracticeTopicComponent() {
         return
       }
       const nextVocab = vocabularies[currentIndex + 1]
-      setFlashcard({ word: nextVocab.word, meaning: nextVocab.meaning, flipped: false })
+      setFlashcard({ word: nextVocab.word, id: nextVocab._id, meaning: nextVocab.meaning, flipped: false })
       setTimeout(() => setDisableAnimation(false), 0)
       setTranslate(0)
     }, 50)
@@ -143,7 +143,7 @@ export default function PracticeTopicComponent() {
         }
         return answer
       }))
-      
+
       await new Promise(resolve => setTimeout(resolve, 500))
 
       const currentIndex = vocabularies.findIndex((vocab) => vocab.word === question.word)
@@ -153,6 +153,15 @@ export default function PracticeTopicComponent() {
       }
       const nextVocab = vocabularies[currentIndex + 1]
       setQuestion({ word: nextVocab.word, meaning: nextVocab.meaning })
+
+      axios.post(`${API_URL}/topics/yourtopic/${id}/saveQuestionHistory`, {
+        wordId: vocabularies[currentIndex]._id,
+        value: true
+      }, {
+        headers: { 
+          Authorization: `Bearer ${Cookies.get('token')}`
+        }
+      })
     }
     else {
       setAnswers(answers.map((answer, i) => {
@@ -164,10 +173,25 @@ export default function PracticeTopicComponent() {
 
       await new Promise(resolve => setTimeout(resolve, 500))
       // chuyển lại thành màu none
-      setAnswers(answers.map((answer) => {
-        return { ...answer, color: 'none' }
-      }))
+      // setAnswers(answers.map((answer) => {
+      //   return { ...answer, color: 'none' }
+      // }))
+      const currentIndex = vocabularies.findIndex((vocab) => vocab.word === question.word)
+      if (currentIndex === vocabularies.length - 1) {
+        alert('Kết thúc')
+        return
+      }
+      const nextVocab = vocabularies[currentIndex + 1]
+      setQuestion({ word: nextVocab.word, meaning: nextVocab.meaning })
 
+      axios.post(`${API_URL}/topics/yourtopic/${id}/saveQuestionHistory`, {
+        wordId: vocabularies[currentIndex]._id,
+        value: false
+      }, {
+        headers: { 
+          Authorization: `Bearer ${Cookies.get('token')}`
+        }
+      })
     }
   }
 
@@ -177,6 +201,7 @@ export default function PracticeTopicComponent() {
       backgroundColor: 'white',
       margin: 'auto',
       borderRadius: '3px',
+      height: '92vh',
       boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)'
     }}>
       {loading && <Loader />}
@@ -188,7 +213,7 @@ export default function PracticeTopicComponent() {
           </TabList>
         </Box>
         <TabPanel value="1" sx={{ height: '761px' }} >
-          <CheckSimilarity open={open} setOpen={setOpen} data={flashcard.word} />
+          <CheckSimilarity open={open} setOpen={setOpen} data={flashcard.word} wordId={flashcard.id} />
           <Box sx={{
             display: 'flex',
             alignItems: 'center',

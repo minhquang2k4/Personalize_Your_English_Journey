@@ -48,7 +48,7 @@ export default function Modal(props) {
           cursor: 'pointer'
         }} />
         <Typography variant="h5" component="h2">
-          <b>{data.word}</b>({data.part_of_speech}): {data.meaning}
+          ({data.difficulty}) <b>{data.word}</b> ({data.part_of_speech}): {data.meaning}
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap:'10px' }}>
           <VolumeUpIcon onClick={() => textToSpeech(data.word)} color='primary' sx={{ cursor: 'pointer' }} />

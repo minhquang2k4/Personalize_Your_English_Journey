@@ -17,18 +17,21 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
-import { Box, Button, Typography } from '@mui/material'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
 
 export default function DetailTopicComponent() {
   const columns = [
     { id: 'word', align: 'center', label: 'Từ', minWidth: 150 },
     { id: 'part_of_speech', align: 'center', label: 'Loại từ', minWidth: 150 },
+    { id: 'difficulty', align: 'center', label: 'Độ khó', minWidth: 150 },
     { id: 'pronunciation', align: 'center', label: 'Phiên âm', minWidth: 150 },
     { id: 'meaning', align: 'center', label: 'Nghĩa', minWidth: 150 }
   ]
   
-  function createData(id, word, part_of_speech, pronunciation, meaning, example, translate) {
-    return { id, word, part_of_speech, pronunciation, meaning, example, translate }
+  function createData(id, word, part_of_speech, difficulty, pronunciation, meaning, example, translate) {
+    return { id, word, part_of_speech, difficulty, pronunciation, meaning, example, translate }
   }
 
   const [rows, setRows] = useState([])
@@ -39,6 +42,7 @@ export default function DetailTopicComponent() {
   const [open, setOpen] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null)
   const [openAddVoca, setOpenAddVoca] = useState(false)
+  const [topicName, setTopicName] = useState('')
 
   const handleChangePage = ( newPage) => {
     setPage(newPage)
@@ -66,10 +70,11 @@ export default function DetailTopicComponent() {
             Authorization: `Bearer ${Cookies.get('token')}`
           }
         })
+        setTopicName(response.data.topic.topicName)
         setStep(response.data.topic.step)
         setRows([])
         for (let voca of response.data.topic.vocabularyIDs) {
-          setRows((prev) => [...prev, createData(voca._id, voca.word, voca.part_of_speech, voca.pronunciation, voca.meaning, voca.example, voca.translate)])
+          setRows((prev) => [...prev, createData(voca._id, voca.word, voca.part_of_speech, voca.difficulty, voca.pronunciation, voca.meaning, voca.example, voca.translate)])
         }
         setLoading(false)
       } catch (error) {
@@ -108,7 +113,7 @@ export default function DetailTopicComponent() {
         gap: '30px'
       }}>
         <Typography variant="h4" align="center" gutterBottom>
-          <b>Chi tiết chủ đề</b>
+          <b>{topicName}</b>
         </Typography>
         <Steper step={step}/>
       </Box>
@@ -136,7 +141,7 @@ export default function DetailTopicComponent() {
       <Modal open={open} setOpen={setOpen} data={selectedRow} />
       <Paper sx={{ width: '100%', overflow: 'auto', boxShadow: '0px -1px 6px rgba(0, 0, 0, 0.1)' }}>
         {loading && <Loader />}
-        <TableContainer sx={{ maxHeight: '460px', minHeight:'460px' }}>
+        <TableContainer sx={{ maxHeight: '550px', minHeight:'550px' }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>

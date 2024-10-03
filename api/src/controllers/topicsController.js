@@ -7,7 +7,7 @@ import ExamModel from '../models/examModel.js'
 
 import { GoogleGenerativeAI } from '@google/generative-ai' 
 import dotenv from 'dotenv'
-import e from 'cors'
+
 dotenv.config()
 
 const API_KEY = process.env.API_KEY
@@ -58,6 +58,7 @@ export const create = async (req, res) => {
         {
           "word": "motorcycle",
           "pronunciation": "/ˈmoʊtərˌsaɪkəl/",
+          "difficulty": "B1",
           "meaning": "xe máy",
           "part_of_speech": "noun",
           "example": "He rides a motorcycle",
@@ -66,6 +67,7 @@ export const create = async (req, res) => {
         {
           "word": "bicycle",
           "pronunciation": "/ˈbaɪsɪkəl/",
+          "difficulty": "A1",
           "meaning": "xe đạp",
           "part_of_speech": "noun",
           "example": "I like to ride a bicycle",
@@ -74,6 +76,7 @@ export const create = async (req, res) => {
         {
           "word": "conference",
           "pronunciation": "/ˈkɒnfərəns/",
+          "difficulty": "B2",
           "meaning": "hội nghị",
           "part_of_speech": "noun",
           "example": "The conference will be held in the hotel",
@@ -82,6 +85,7 @@ export const create = async (req, res) => {
         {
           "word": "run",
           "pronunciation": "/rʌn/",
+          "difficulty": "A1",
           "meaning": "chạy",
           "part_of_speech": "verb",
           "example": "She runs every morning to stay fit.",
@@ -90,6 +94,7 @@ export const create = async (req, res) => {
         {
           "word": "eat",
           "pronunciation": "/iːt/",
+          "difficulty": "A1",
           "meaning": "ăn",
           "part_of_speech": "verb",
           "example": "We eat dinner at 7 PM every day.",
@@ -98,6 +103,7 @@ export const create = async (req, res) => {
         {
           "word": "beautiful",
           "pronunciation": "/ˈbjuːtɪfəl/",
+          "difficulty": "B1",
           "meaning": "đẹp",
           "part_of_speech": "adjective",
           "example": "The garden is beautiful in the spring.",
@@ -285,6 +291,7 @@ export const create = async (req, res) => {
       const newVocabulary = new VocabularyModel({
         word: vocabulary.word,
         pronunciation: vocabulary.pronunciation,
+        difficulty: vocabulary.difficulty,
         meaning: vocabulary.meaning,
         part_of_speech: vocabulary.part_of_speech,
         example: vocabulary.example,
@@ -449,7 +456,6 @@ export const getAllExam = async (req, res) => {
   try {
     const topicId = req.params.id
     const topic = await TopicModel.findOne({ _id: topicId }).populate('examIDs').select('examIDs')
-    console.log("🚀 ~ getAllExam ~ exam:", topic)
     return res.status(200).json({ topic })
   } catch (error) {
     return res.status(500).json({ message: error.message })
@@ -459,8 +465,39 @@ export const getAllExam = async (req, res) => {
 export const getExamDetail = async (req, res) => {
   try {
     const examId = req.params.examId
-    const exam = await ExamModel.findOne({ _id: examId }).populate('questionIDs')
-    return res.status(200).json({ exam })
+    const questions = await ExamModel.findOne({ _id: examId }).populate('questionIDs').select('questionIDs')
+    return res.status(200).json({ questions })
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+  }
+}
+
+export const submitExam = async (req, res) => {
+  try {
+    const answers = req.body.answers
+    const score = req.body.score
+    const examId = req.params.examId
+
+    const exam = await ExamModel.findOne({ _id: examId })
+    exam.score.push(score)
+    await exam.save()
+
+    const questionIDs = await ExamModel.findOne({ _id: examId }).select('questionIDs')
+
+    for (let i = 0; i < questionIDs.questionIDs.length; i++) {
+
+      const question = await QuestionModel.findOne({ _id: questionIDs.questionIDs[i] })
+
+      if (!answers[i]) {
+        question.answer.push(null)
+      } else {
+        question.answer.push(answers[i])
+      }
+
+      await question.save()
+
+    }
+
   } catch (error) {
     return res.status(500).json({ message: error.message })
   }
@@ -478,13 +515,14 @@ export const addVoca = async (req, res) => {
     {
         "word": "${word}",
         "pronunciation": "/.../",
+        "difficulty": "A1/A2/B1/B2/C1/C2",
         "meaning": "${meaning}",
         "part_of_speech": "noun/verb/adjective",
         "example": "",
         "translate": ""
     }`
 
-    const msg = `Hoàn thiện thông tin từ vựng (đầy đủ thông tin các trường, trong đó ) theo mẫu json ${data}`
+    const msg = `Hoàn thiện thông tin từ vựng (đầy đủ thông tin các trường) theo mẫu json ${data}`
 
     console.log("🚀 ~ addVoca ~ msg:", msg)
     const genAI = new GoogleGenerativeAI(API_KEY)
@@ -525,8 +563,37 @@ export const addVoca = async (req, res) => {
     
     await run()
 
-    
   } catch (error) {
     return res.status(500).json({ message: error.message }) 
+  }
+}
+
+export const saveSimilarityHistory = async (req, res) => {
+  try {
+    const similarity = req.body.similarity
+    const wordId = req.body.wordId
+
+    const vocabulary = await VocabularyModel.findOne({ _id: wordId })
+    vocabulary.similarityHistory.push({ similarity, time: new Date() })
+    await vocabulary.save()
+
+    return res.status(200).json({ message: 'ok' })
+
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
+    
+  }
+  
+
+}
+
+export const saveQuestionHistory = async (req, res) => {
+  try {
+    const { wordId, value } = req.body
+    const vocabulary = await VocabularyModel.findOne({ _id: wordId })
+    vocabulary.questionHistory.push({ value, time: new Date() })
+    await vocabulary.save()
+  } catch (error) {
+    return res.status(500).json({ message: error.message })
   }
 }

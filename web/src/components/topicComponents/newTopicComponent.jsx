@@ -77,7 +77,7 @@ const NewTopic = () => {
       flexDirection: 'column',
       gap: '80px',
       backgroundColor: 'white',
-      height: '90vh',
+      height: '99%',
       borderRadius: '5px',
       boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)'
     }} >

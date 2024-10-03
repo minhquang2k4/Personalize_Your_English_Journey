@@ -5,6 +5,7 @@ const DetailTopicPage = () => {
   return (
     <Box sx={{
       padding: '13px',
+      height: '93vh',
       backgroundColor: '#f5f5f5'
     }}>
       <DetailTopicComponent />
