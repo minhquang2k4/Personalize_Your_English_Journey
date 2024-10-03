@@ -100,7 +100,7 @@ export default function YourTopicComponent() {
   return (
     <Paper sx={{ width: '98%', overflow: 'auto', boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)' }}>
       {loading && <Loader />}
-      <TableContainer sx={{ maxHeight: '760px', minHeight:'760px' }}>
+      <TableContainer sx={{ maxHeight: '86vh', minHeight:'86vh' }}>
         <Table stickyHeader aria-label="sticky table">
           {/* <TableHead sx={{ '& .MuiTableHead-root': {
             backgroundColor: '#FAFAFA'

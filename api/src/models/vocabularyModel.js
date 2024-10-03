@@ -7,6 +7,29 @@ const vocabularySchema = new mongoose.Schema({
   pronunciation: {
     type: String
   },
+  difficulty: {
+    type: String
+  },
+  similarityHistory: [
+    {
+      similarity: {
+        type: String
+      },
+      time: {
+        type: Date
+      }
+    }
+  ],
+  questionHistory: [
+    {
+      value: {
+        type: Boolean
+      },
+      time: {
+        type: Date
+      }
+    }
+  ],
   meaning: {
     type: String
   },

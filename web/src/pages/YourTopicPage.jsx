@@ -5,7 +5,7 @@ const YourTopicPage = () => {
   return (
     <Box sx={{
       width: '100%',
-      height: '95.3%',
+      height: '94vh',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',

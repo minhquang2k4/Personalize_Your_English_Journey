@@ -9,9 +9,11 @@ import AccountPage from '../pages/AccountPage'
 import YourTopicPage from '../pages/YourTopicPage'
 import DetailTopicPage from '../pages/DetailTopicPage'
 import PracticeTopicPage from '../pages/practiceTopicPage'
+import ExamTopicPage from '../pages/examTopicPage'
+import DetailExamPage from '../pages/DetailExamPage'
+import HistoryExamPage from '../pages/HistoryExamPage'
 
 import Logout from '../components/authComponents/logoutComponent'
-import ExamTopicPage from '../pages/examTopicPage'
 
 export const routes = [
   {
@@ -41,6 +43,14 @@ export const routes = [
       {
         path: 'topics/yourtopic/:id/exam',
         element: <ExamTopicPage />
+      },
+      {
+        path: 'topics/yourtopic/:id/exam/:examID',
+        element: <DetailExamPage />
+      },
+      {
+        path: 'topics/yourtopic/:id/exam/:examID/history',
+        element: <HistoryExamPage />
       },
       {
         path: 'topics/yourtopic',

@@ -1,4 +1,7 @@
 import { useEffect, useState } from 'react'
+import axios from 'axios'
+import Cookies from 'js-cookie'
+import { useParams } from 'react-router-dom'
 
 import Dialog from '@mui/material/Dialog'
 import Box from '@mui/material/Box'
@@ -8,10 +11,11 @@ import MicIcon from '@mui/icons-material/Mic'
 
 
 export default function Similarity(props) {
-  const { open, setOpen, data } = props
+  const { open, setOpen, data, wordId } = props
   const [listening, setListening] = useState(false)
-
-
+  const { id } = useParams()
+  const API_URL = import.meta.env.VITE_API_URL
+  
   const handleClose = () => {
     setOpen(false)
     setListening(false)
@@ -65,7 +69,7 @@ export default function Similarity(props) {
               <Typography variant='h4' component='h2' sx={{ textAlign: 'center' }}>Nhấn vào biểu tượng để bắt đầu</Typography>
             </>
           )}
-          { listening ? <CheckSimilarity text={data} setListening={setListening} /> : null }
+          { listening ? <CheckSimilarity text={data} setListening={setListening} API_URL={API_URL} id={id} wordId={wordId} /> : null }
         </Box>
 
       </Box>
@@ -73,7 +77,7 @@ export default function Similarity(props) {
   )
 }
 
-function CheckSimilarity({ text, setListening }) {
+function CheckSimilarity({ text, setListening, id, API_URL, wordId }) {
   const [text2, setText2] = useState('')
   const [similarity, setSimilarity] = useState(null)
 
@@ -99,7 +103,23 @@ function CheckSimilarity({ text, setListening }) {
       setText2(cleanText)
 
       // Update similarity after updating text2
-      setSimilarity(calculateSimilarity(text, cleanText))
+      const res = calculateSimilarity(text, cleanText)
+      setSimilarity(res)
+      // Call API to save the result
+      axios.post(`${API_URL}/topics/yourtopic/${id}/saveSimilarityHistory`, {
+        wordId: wordId,
+        similarity: res
+      }, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get('token')}`
+        }
+      })
+        .then(response => {
+          console.log('History saved successfully:', response.data)
+        })
+        .catch(error => {
+          console.error('Error saving history:', error)
+        })
     }
 
     recognition.onerror = (event) => {
@@ -118,17 +138,17 @@ function CheckSimilarity({ text, setListening }) {
 
   return (
     <>
+      <Typography variant="h6">{text2}</Typography>
       {similarity !== null && <Typography variant="h6">Độ tương đồng: {similarity.toFixed(2)}%</Typography>}
     </>
   )
 }
 
- 
 function calculateSimilarity(text1, text2) {
   // Tính khoảng cách Levenshtein
   const distance = levenshteinDistance(text1.toLowerCase(), text2.toLowerCase())
   const maxLength = Math.max(text1.length, text2.length)
-  // Tính độ giống nhau theo phần trăm
+  // Tính độ giống nhau theo phần trăm tương ứng
   return ((1 - distance / maxLength) * 100)
 }
 
