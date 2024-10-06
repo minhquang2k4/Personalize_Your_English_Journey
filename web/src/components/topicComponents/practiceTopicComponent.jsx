@@ -148,11 +148,12 @@ export default function PracticeTopicComponent() {
 
       const currentIndex = vocabularies.findIndex((vocab) => vocab.word === question.word)
       if (currentIndex === vocabularies.length - 1) {
-        alert('Kết thúc')
-        return
+        const nextVocab = vocabularies[0]
+        setQuestion({ word: nextVocab.word, meaning: nextVocab.meaning })
+      } else {
+        const nextVocab = vocabularies[currentIndex + 1]
+        setQuestion({ word: nextVocab.word, meaning: nextVocab.meaning })
       }
-      const nextVocab = vocabularies[currentIndex + 1]
-      setQuestion({ word: nextVocab.word, meaning: nextVocab.meaning })
 
       axios.post(`${API_URL}/topics/yourtopic/${id}/saveQuestionHistory`, {
         wordId: vocabularies[currentIndex]._id,
