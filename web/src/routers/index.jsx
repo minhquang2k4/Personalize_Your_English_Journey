@@ -12,6 +12,7 @@ import PracticeTopicPage from '../pages/practiceTopicPage'
 import ExamTopicPage from '../pages/examTopicPage'
 import DetailExamPage from '../pages/DetailExamPage'
 import HistoryExamPage from '../pages/HistoryExamPage'
+import HistoryExamDetailPage from '../pages/HistoryExamDetailPage'
 
 import Logout from '../components/authComponents/logoutComponent'
 
@@ -51,6 +52,10 @@ export const routes = [
       {
         path: 'topics/yourtopic/:id/exam/:examID/history',
         element: <HistoryExamPage />
+      },
+      {
+        path: 'topics/yourtopic/:id/exam/:examID/history/:historyID',
+        element: <HistoryExamDetailPage />
       },
       {
         path: 'topics/yourtopic',

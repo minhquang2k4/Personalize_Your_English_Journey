@@ -112,79 +112,79 @@ export const create = async (req, res) => {
       ]
     }
 
-    const conversationTemplate = {
-      "conversation": [
-        {
-          "name": "Alice",
-          "content": "Hi, Bob. What are you doing?",
-          "translate": "Chào Bob, bạn đang làm gì vậy?"
-        },
-        {
-          "name": "Bob",
-          "content": "Hi, Alice. I'm just looking at some cars.",
-          "translate": "Chào Alice, tôi chỉ đang xem một số chiếc xe hơi."
-        },
-        {
-          "name": "Alice",
-          "content": "Oh, that's cool. What kind of cars are you looking at?",
-          "translate": "Ồ, thật tuyệt. Bạn đang xem loại xe gì vậy?"          
-        },
-        {
-          "name": "Bob",
-          "content": "I'm looking at sports cars and SUVs.",
-          "translate": "Tôi đang xem các loại xe thể thao và SUV."
-        }
-      ]
-    }
+    // const conversationTemplate = {
+    //   "conversation": [
+    //     {
+    //       "name": "Alice",
+    //       "content": "Hi, Bob. What are you doing?",
+    //       "translate": "Chào Bob, bạn đang làm gì vậy?"
+    //     },
+    //     {
+    //       "name": "Bob",
+    //       "content": "Hi, Alice. I'm just looking at some cars.",
+    //       "translate": "Chào Alice, tôi chỉ đang xem một số chiếc xe hơi."
+    //     },
+    //     {
+    //       "name": "Alice",
+    //       "content": "Oh, that's cool. What kind of cars are you looking at?",
+    //       "translate": "Ồ, thật tuyệt. Bạn đang xem loại xe gì vậy?"          
+    //     },
+    //     {
+    //       "name": "Bob",
+    //       "content": "I'm looking at sports cars and SUVs.",
+    //       "translate": "Tôi đang xem các loại xe thể thao và SUV."
+    //     }
+    //   ]
+    // }
 
-    const questionTemplate = {
-      "questions": [
-        {
-          "question": "What kind of cars is Bob looking at?",
-          "correctAnswer": "B",
-          "A": "Sedans and coupes",
-          "B": "Sports cars and SUVs",
-          "C": "Trucks and vans",
-          "D": "Motorcycles and bicycles"
-        },
-        {
-          "question": "Why does Alice want an SUV?",
-          "correctAnswer": "C",
-          "A": "Because she likes to go off-roading",
-          "B": "Because she needs a lot of space for her luggage",
-          "C": "Because she needs a safe and spacious vehicle for her family",
-          "D": "Because she wants to impress her friends"
-        },
-        {
-          "question": "What is Bob's favorite car?",
-          "correctAnswer": "A",
-          "A": "The red sports car",
-          "B": "The black SUV",
-          "C": "The blue sedan",
-          "D": "The white truck"
-        },
-        {
-          "question": "What does Alice think of the blue sedan?",
-          "correctAnswer": "D",
-          "A": "She thinks it's too small",
-          "B": "She thinks it's too expensive",
-          "C": "She thinks it's too slow",
-          "D": "She thinks it's a good choice"
-        },
-        {
-          "question": "What does Bob think of the white truck?",
-          "correctAnswer": "B",
-          "A": "He thinks it's too big",
-          "B": "He thinks it's too slow",
-          "C": "He thinks it's too expensive",
-          "D": "He thinks it's too loud"
-        }
-      ]
-    }
+    // const questionTemplate = {
+    //   "questions": [
+    //     {
+    //       "question": "What kind of cars is Bob looking at?",
+    //       "correctAnswer": "B",
+    //       "A": "Sedans and coupes",
+    //       "B": "Sports cars and SUVs",
+    //       "C": "Trucks and vans",
+    //       "D": "Motorcycles and bicycles"
+    //     },
+    //     {
+    //       "question": "Why does Alice want an SUV?",
+    //       "correctAnswer": "C",
+    //       "A": "Because she likes to go off-roading",
+    //       "B": "Because she needs a lot of space for her luggage",
+    //       "C": "Because she needs a safe and spacious vehicle for her family",
+    //       "D": "Because she wants to impress her friends"
+    //     },
+    //     {
+    //       "question": "What is Bob's favorite car?",
+    //       "correctAnswer": "A",
+    //       "A": "The red sports car",
+    //       "B": "The black SUV",
+    //       "C": "The blue sedan",
+    //       "D": "The white truck"
+    //     },
+    //     {
+    //       "question": "What does Alice think of the blue sedan?",
+    //       "correctAnswer": "D",
+    //       "A": "She thinks it's too small",
+    //       "B": "She thinks it's too expensive",
+    //       "C": "She thinks it's too slow",
+    //       "D": "She thinks it's a good choice"
+    //     },
+    //     {
+    //       "question": "What does Bob think of the white truck?",
+    //       "correctAnswer": "B",
+    //       "A": "He thinks it's too big",
+    //       "B": "He thinks it's too slow",
+    //       "C": "He thinks it's too expensive",
+    //       "D": "He thinks it's too loud"
+    //     }
+    //   ]
+    // }
     
     const vocabularyJsonTemplate = JSON.stringify(vocabularyTemplate, null, 2)
-    const conversationJsonTemplate = JSON.stringify(conversationTemplate, null, 2)
-    const questionJsonTemplate = JSON.stringify(questionTemplate, null, 2)
+    // const conversationJsonTemplate = JSON.stringify(conversationTemplate, null, 2)
+    // const questionJsonTemplate = JSON.stringify(questionTemplate, null, 2)
 
     // const dataJsonTemplate = JSON.stringify(dataTemplate, null, 2)
 
@@ -199,21 +199,21 @@ export const create = async (req, res) => {
 
     // console.log("🚀 ~ create ~ msg:", msg)
 
-    const msg1= `Tạo dữ liệu khoảng 20 từ vựng về chủ đề ${topic} theo mẫu json (phải đầy đủ tất cả các trường thông tin)
+    const msg1= `Tạo dữ liệu khoảng 30 từ vựng về chủ đề ${topic} theo mẫu json (phải đầy đủ tất cả các trường thông tin)
     ${vocabularyJsonTemplate}`
     console.log("🚀 ~ create ~ msg1:", msg1)
 
-    const msg2 = `Tạo đoạn hội thoại bằng tiếng anh khoảng 15 lượt hội thoại về chủ đề ${topic} sử dụng những từ vựng ở trên theo mẫu json (phải đầy đủ tât cả các trường thông tin và thay đổi name khác)
-    ${conversationJsonTemplate}.`
-    console.log("🚀 ~ create ~ msg2:", msg2)
+    // const msg2 = `Tạo đoạn hội thoại bằng tiếng anh khoảng 15 lượt hội thoại về chủ đề ${topic} sử dụng những từ vựng ở trên theo mẫu json (phải đầy đủ tât cả các trường thông tin và thay đổi name khác)
+    // ${conversationJsonTemplate}.`
+    // console.log("🚀 ~ create ~ msg2:", msg2)
 
-    const msg3 = `Tạo 5 câu hỏi về nội dung đoạn hội thoại trên theo mẫu json
-    ${questionJsonTemplate}`
-    console.log("🚀 ~ create ~ msg3:", msg3)
+    // const msg3 = `Tạo 5 câu hỏi về nội dung đoạn hội thoại trên theo mẫu json
+    // ${questionJsonTemplate}`
+    // console.log("🚀 ~ create ~ msg3:", msg3)
 
     let vocabularies = []
-    let conversation = []
-    let questions = []
+    // let conversation = []
+    // let questions = []
 
     async function run() {
       const model = genAI.getGenerativeModel({ model: "gemini-pro" })
@@ -236,36 +236,36 @@ export const create = async (req, res) => {
       vocabularies = jsonObject1.vocabularies
       console.log("🚀 ~ run ~ vocabularies:", vocabularies)
 
-      const result2 = await chat.sendMessage(msg2)
-      const response2 = await result2.response
-      const text2 = response2.text()
-      let jsonObject2 = {}
-      try {
-        let jsonString2 = text2.replace(/^[^{]*\{/, '{')
+      // const result2 = await chat.sendMessage(msg2)
+      // const response2 = await result2.response
+      // const text2 = response2.text()
+      // let jsonObject2 = {}
+      // try {
+      //   let jsonString2 = text2.replace(/^[^{]*\{/, '{')
    
-        jsonString2 = jsonString2.replace(/\}[^}]*$/, '}')
-        jsonObject2 = JSON.parse(jsonString2)
-      } catch (error) {
-        return res.status(500).json({ message: error.message })
-      }
+      //   jsonString2 = jsonString2.replace(/\}[^}]*$/, '}')
+      //   jsonObject2 = JSON.parse(jsonString2)
+      // } catch (error) {
+      //   return res.status(500).json({ message: error.message })
+      // }
 
-      conversation = jsonObject2.conversation
-      console.log("🚀 ~ run ~ conversation:", conversation)
+      // conversation = jsonObject2.conversation
+      // console.log("🚀 ~ run ~ conversation:", conversation)
 
-      const result3 = await chat.sendMessage(msg3)
-      const response3 = await result3.response
-      const text3 = response3.text()
-      let jsonObject3 = {}
-      try {
-        let jsonString3 = text3.replace(/^[^{]*\{/, '{')
-        jsonString3 = jsonString3.replace(/\}[^}]*$/, '}')
-        jsonObject3 = JSON.parse(jsonString3)
-      } catch (error) {
-        return res.status(500).json({ message: error.message })
-      }
+      // const result3 = await chat.sendMessage(msg3)
+      // const response3 = await result3.response
+      // const text3 = response3.text()
+      // let jsonObject3 = {}
+      // try {
+      //   let jsonString3 = text3.replace(/^[^{]*\{/, '{')
+      //   jsonString3 = jsonString3.replace(/\}[^}]*$/, '}')
+      //   jsonObject3 = JSON.parse(jsonString3)
+      // } catch (error) {
+      //   return res.status(500).json({ message: error.message })
+      // }
 
-      questions = jsonObject3.questions
-      console.log("🚀 ~ run ~ questions:", questions)
+      // questions = jsonObject3.questions
+      // console.log("🚀 ~ run ~ questions:", questions)
     }
 
     await run()
@@ -302,29 +302,29 @@ export const create = async (req, res) => {
     }
 
     // create new conversation
-    for (let conv of conversation) {
-      const newConversation = new ConversationModel({
-        name: conv.name,
-        content: conv.content,
-        translate: conv.translate
-      })
-      await newConversation.save()
-      newTopic.conversationIDs.push(newConversation._id)
-    }
+    // for (let conv of conversation) {
+    //   const newConversation = new ConversationModel({
+    //     name: conv.name,
+    //     content: conv.content,
+    //     translate: conv.translate
+    //   })
+    //   await newConversation.save()
+    //   newTopic.conversationIDs.push(newConversation._id)
+    // }
 
     // create new questions
-    for (let question of questions) {
-      const newQuestion = new QuestionModel({
-        question: question.question,
-        correctAnswer: question.correctAnswer,
-        A: question.A,
-        B: question.B,
-        C: question.C,
-        D: question.D
-      })
-      await newQuestion.save()
-      newTopic.questionIDs.push(newQuestion._id)
-    }
+    // for (let question of questions) {
+    //   const newQuestion = new QuestionModel({
+    //     question: question.question,
+    //     correctAnswer: question.correctAnswer,
+    //     A: question.A,
+    //     B: question.B,
+    //     C: question.C,
+    //     D: question.D
+    //   })
+    //   await newQuestion.save()
+    //   newTopic.questionIDs.push(newQuestion._id)
+    // }
 
     await newTopic.save()
 
@@ -395,7 +395,7 @@ export const createExam = async (req, res) => {
     ]`
 
     const msg = `Dựa vào data từ vựng sau:${dataJson}.
-    Hãy tạo 1 bộ câu hỏi trắc nhiệm tiếng anh khoảng 15 câu hỏi (đầu ra ở dạng json) cho các từ vựng trên, theo các dạng câu hỏi có 4 đáp án hoặc câu hỏi true false hoặc dạng điền vào chỗ trống theo mẫu json sau: ${resTemplate}`
+    Hãy tạo 1 bộ câu hỏi trắc nhiệm tiếng anh khoảng 30 câu hỏi (đầu ra ở dạng json) cho các từ vựng trên, theo các dạng câu hỏi có 4 đáp án hoặc câu hỏi true false hoặc dạng điền vào chỗ trống theo mẫu json sau: ${resTemplate}`
    
     console.log("🚀 ~ exam ~ msg:", msg)
 
@@ -419,8 +419,7 @@ export const createExam = async (req, res) => {
 
       const exam = new ExamModel(
         {
-          questionIDs: [],
-          score: 0
+          questionIDs: []
         }
       )
 
@@ -466,7 +465,9 @@ export const getExamDetail = async (req, res) => {
   try {
     const examId = req.params.examId
     const questions = await ExamModel.findOne({ _id: examId }).populate('questionIDs').select('questionIDs')
-    return res.status(200).json({ questions })
+    const exam = await ExamModel.findOne({ _id: examId })
+    console.log("🚀 ~ getExamDetail ~ exam:", exam)
+    return res.status(200).json({ questions, exam })
   } catch (error) {
     return res.status(500).json({ message: error.message })
   }
