@@ -83,7 +83,6 @@ const DetailExamComponent = () => {
       }
     }
     score = _.round(score / questions.length * 100, 2)
-    console.log("🚀 ~ handleSubmit ~ questions.length:", questions.length)
     setScore( score )
 
     try {

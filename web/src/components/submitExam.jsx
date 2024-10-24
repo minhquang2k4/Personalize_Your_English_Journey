@@ -47,7 +47,7 @@ export default function Modal(props) {
           </Typography>
         ) }
 
-        <Button onClick={ () => { navigate(`${location.pathname}/history`) } } > Xem đáp án </Button>
+        <Button onClick={ () => { navigate(`${location.pathname}/history`) } } > Quay Lại </Button>
 
       </Box>
     </Dialog>

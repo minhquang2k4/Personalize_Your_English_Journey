@@ -1,32 +1,59 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { useNavigate, useParams, useLocation } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 // UI Components
 import Loader from '../loader'
 
 // MUI
 import Box from '@mui/material/Box'
-import Radio from '@mui/material/Radio'
-import RadioGroup from '@mui/material/RadioGroup'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
-import HighlightOffIcon from '@mui/icons-material/HighlightOff'
+// import Button from '@mui/material/Button'
+import Paper from '@mui/material/Paper'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
+import TableHead from '@mui/material/TableHead'
+import TablePagination from '@mui/material/TablePagination'
+import TableRow from '@mui/material/TableRow'
+import Button from '@mui/material/Button'
 
-const HistoryExamPage = () => {
+export default function HistoryExamPage() {
   const API_URL = import.meta.env.VITE_API_URL
   const navigate = useNavigate()
-  const location = useLocation()
   const { id, examID } = useParams()
+  const [loading, setLoading] = useState(false)
+  const [rows, setRows] = useState([])
+  const [page, setPage] = useState(0)
+  const [rowsPerPage, setRowsPerPage] = useState(1000)
 
-  const [questions, setQuestions] = useState([])
-  const [answers, setAnswers] = useState(Array(50).fill(null))
+  const columns = [
+    { id: 'lan', align: 'center', label: 'Lần', minWidth: 150 },
+    { id: 'diem', align: 'center', label: 'Điểm', minWidth: 150 }
+  ]
+  
+  function createData(count, score) {
+    let lan = count
+    let diem = score
+    return { lan, diem }
+  }
 
+  const handleChangePage = ( newPage) => {
+    setPage(newPage)
+  }
 
-  useEffect(() => {
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value)
+    setPage(0)
+  }
+
+  const executeExam = () => {
+    navigate(`/topics/yourtopic/${id}/exam/${examID}`)
+  }
+
+  useEffect( () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${API_URL}/topics/yourtopic/${id}/${examID}`, {
@@ -34,115 +61,86 @@ const HistoryExamPage = () => {
             Authorization: `Bearer ${Cookies.get('token')}`
           }
         })
-        setQuestions(response.data.questions.questionIDs)
+        setRows([])
+     
+        console.log("🚀 ~ fetchData ~ response.data.exam.score.length:", response.data.exam.score.length)
+        for (let i = 0; i < response.data.exam.score.length; i++) {
+          let data = createData( i+1, response.data.exam.score[i])
+          setRows((prev) => [...prev, data])
+        }
+
       } catch (error) {
         console.log(error)
       }
     }
-
     fetchData()
-  }, [])
-
-  const handleAnswerChange = async (questionIndex, answer) => {
-    const newAnswers = [...answers]
-    newAnswers[questionIndex] = answer
-    setAnswers(newAnswers)
-  }
+  }, [] )
 
   return (
     <Box sx={{
       backgroundColor: 'white',
       margin: 'auto',
       borderRadius: '3px',
-      minHeight: '90vh',
-      maxHeight: '90vh',
-      boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-      overflow: 'auto'
+      height: '92vh',
+      boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)'
     }}>
-      { questions.map((question, index) => {
-
-        let selectedAnswer = question.answer[question.answer.length - 1]
-        let correctAnswer = question.correctAnswer
-        let isCorrect = selectedAnswer === correctAnswer
-
-        const getAnswerIcon = (option) => {
-          if (isCorrect) {
-            if (option === selectedAnswer) {
-              return <CheckCircleOutlineIcon color='success' />
-            } else {
-              return null
-            }
-          }
-          
-          if (option === selectedAnswer) {
-            return <HighlightOffIcon color='error' />
-          }
-
-          if (option === correctAnswer) {
-            return <CheckCircleOutlineIcon color='success' />
-          }
-          
-        }
-
-        return (
-          <Box key={index} sx={{
-            padding: '10px',
-            borderBottom: '1px solid #f5f5f5',
-            alignItems: 'center',
-            '&:hover': {
-              backgroundColor: '#f5f5f5'
-            }
-          }}>
-            <Typography sx={{ display:'flex' }} >{<Typography color={isCorrect ? 'success' : 'error' } >Question {index + 1}</Typography> }: {question.question}</Typography>
-            { 
-              question.A && 
-              (
-                <Box sx={{ display: 'flex', gap: '10px' }}>
-                  <Typography> {question.A} </Typography> 
-                  {getAnswerIcon('A')}
-                </Box>
-              )
-            }
-            {
-              question.B && 
-              (
-                <Box sx={{ display: 'flex', gap: '10px' }}>
-                  <Typography> {question.B} </Typography> 
-                  {getAnswerIcon('B')}
-                </Box>
-              )
-            }
-            {
-              question.C && 
-              (
-                <Box sx={{ display: 'flex', gap: '10px' }}>
-                  <Typography> {question.C} </Typography> 
-                  {getAnswerIcon('C')}
-                </Box>
-              )
-            }
-            {
-              question.D && 
-              (
-                <Box sx={{ display: 'flex', gap: '10px' }}>
-                  <Typography> {question.D} </Typography> 
-                  {getAnswerIcon('D')}
-                </Box>
-              )
-            }
-          </Box>
-        )
-      })}
-
-      <Box sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        margin: '10px'
-      }} >
-        <Button variant='contained' onClick={() => navigate(location.pathname.substring(0, location.pathname.lastIndexOf('/')))}>Làm lại</Button>
+      { loading && <Loader /> }
+      <Typography variant='h4' component='div' sx={{ textAlign: 'center', padding: '90px' }} >Lịch sử làm bài</Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginRight: '10px' }}>
+        <Button onClick={() => { executeExam() } } >Làm bài</Button>
       </Box>
+      <Paper sx={{ width: '100%', overflow: 'auto', boxShadow: '0px -1px 6px rgba(0, 0, 0, 0.1)' }}>
+        <TableContainer sx={{ maxHeight: '600px', minHeight:'600px' }}>
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const backgroundColor = index % 2 === 0 ? '#FAFAFA' : '#ffffff'
+                  return (
+                    <TableRow hover tabIndex={-1} key={index} sx={{
+                      cursor: 'pointer', 
+                      backgroundColor: { backgroundColor } 
+                    }} >
+                      {columns.map((column) => {
+                        const value = row[column.id]
+                        return (
+                          <TableCell key={column.id} align={column.align} onClick={ () => { navigate(`/topics/yourtopic/${id}/exam/${examID}/history/${row['lan']}`) } } >
+                            {column.format && typeof value === 'number'
+                              ? column.format(value)
+                              : value}
+                          </TableCell>
+                        )
+                      })}
+                    </TableRow>
+                  )
+                })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[1000]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>      
     </Box>
   )
 }
-
-export default HistoryExamPage
