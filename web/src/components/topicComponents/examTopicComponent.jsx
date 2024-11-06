@@ -74,6 +74,7 @@ export default function ExamTopicComponent() {
       if (error.response.status === 500) {
         alert('Lỗi sever. Vui lòng thử lại sau')
       }
+      setLoading(false)
     }
   }
 
@@ -104,6 +105,7 @@ export default function ExamTopicComponent() {
         if (error.response.status === 500) {
           alert('Lỗi sever. Vui lòng thử lại sau')
         }
+        setLoading(false)
       }
     }
     fetchExam()
