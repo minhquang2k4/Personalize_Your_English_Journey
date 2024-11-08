@@ -16,13 +16,14 @@ router.get('/yourtopic/:id/getAllExam', authorization, getAllExam)
 
 router.get('/yourtopic/:id/:examId', authorization, getExamDetail)
 
-router.post('/yourtopic/:id/:examId', authorization, submitExam)
-
 router.post('/yourtopic/:id/addVoca', authorization, addVoca)
 
 router.post('/yourtopic/:id/saveSimilarityHistory', authorization, saveSimilarityHistory)
 
 router.post('/yourtopic/:id/saveQuestionHistory', authorization, saveQuestionHistory)
+
+router.post('/yourtopic/:id/:examId', authorization, submitExam)
+
 
 router.post('/create', authorization, create)
 
