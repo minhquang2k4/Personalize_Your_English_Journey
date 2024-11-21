@@ -30,7 +30,6 @@ export const getDetail = async (req, res) => {
   try {
     const topicId = req.params.id
     const topic = await TopicModel.findOne({ _id: topicId }).populate('vocabularyIDs').populate('conversationIDs').populate('questionIDs')
-    console.log("🚀 ~ getDetail ~ topic:", topic)
     return res.status(200).json({ topic })
   } catch (error) {
     return res.status(500).json({ message: error.message })
@@ -201,7 +200,7 @@ export const create = async (req, res) => {
 
     const msg1= `Tạo dữ liệu khoảng 30 từ vựng về chủ đề ${topic} theo mẫu json (phải đầy đủ tất cả các trường thông tin)
     ${vocabularyJsonTemplate}`
-    console.log("🚀 ~ create ~ msg1:", msg1)
+    // console.log("🚀 ~ create ~ msg1:", msg1)
 
     // const msg2 = `Tạo đoạn hội thoại bằng tiếng anh khoảng 15 lượt hội thoại về chủ đề ${topic} sử dụng những từ vựng ở trên theo mẫu json (phải đầy đủ tât cả các trường thông tin và thay đổi name khác)
     // ${conversationJsonTemplate}.`
@@ -227,14 +226,14 @@ export const create = async (req, res) => {
         let jsonString1 = text1.replace(/^[^{]*\{/, '{')
         jsonString1 = jsonString1.replace(/\}[^}]*$/, '}')
         jsonObject1 = JSON.parse(jsonString1)
-        console.log("🚀 ~ run ~ jsonString1:", jsonString1)
-        console.log("🚀 ~ run ~ jsonObject1:", jsonObject1)
+        // console.log("🚀 ~ run ~ jsonString1:", jsonString1)
+        // console.log("🚀 ~ run ~ jsonObject1:", jsonObject1)
       } catch (error) {
         return res.status(500).json({ message: error.message })
       }
 
       vocabularies = jsonObject1.vocabularies
-      console.log("🚀 ~ run ~ vocabularies:", vocabularies)
+      // console.log("🚀 ~ run ~ vocabularies:", vocabularies)
 
       // const result2 = await chat.sendMessage(msg2)
       // const response2 = await result2.response
@@ -397,7 +396,7 @@ export const createExam = async (req, res) => {
     const msg = `Dựa vào data từ vựng sau:${dataJson}.
     Hãy tạo 1 bộ câu hỏi trắc nhiệm tiếng anh khoảng 30 câu hỏi (đầu ra ở dạng json) cho các từ vựng trên, theo các dạng câu hỏi có 4 đáp án hoặc câu hỏi true false hoặc dạng điền vào chỗ trống theo mẫu json sau: ${resTemplate}`
    
-    console.log("🚀 ~ exam ~ msg:", msg)
+    // console.log("🚀 ~ exam ~ msg:", msg)
 
     const genAI = new GoogleGenerativeAI(API_KEY)
 
@@ -408,14 +407,14 @@ export const createExam = async (req, res) => {
       const result = await chat.sendMessage(msg)
       const response = await result.response
       const text = response.text()
-      console.log("🚀 ~ run ~ text:", text)
+      // console.log("🚀 ~ run ~ text:", text)
       const start = text.indexOf('[')
       const end = text.lastIndexOf(']') + 1
       
       let jsonString = text.substring(start, end)
       
       let jsonObject = JSON.parse(jsonString)
-      console.log("🚀 ~ run ~ jsonObject:", jsonObject)
+      // console.log("🚀 ~ run ~ jsonObject:", jsonObject)
 
       const exam = new ExamModel(
         {
@@ -466,7 +465,7 @@ export const getExamDetail = async (req, res) => {
     const examId = req.params.examId
     const questions = await ExamModel.findOne({ _id: examId }).populate('questionIDs').select('questionIDs')
     const exam = await ExamModel.findOne({ _id: examId })
-    console.log("🚀 ~ getExamDetail ~ exam:", exam)
+    // console.log("🚀 ~ getExamDetail ~ exam:", exam)
     return res.status(200).json({ questions, exam })
   } catch (error) {
     return res.status(500).json({ message: error.message })
@@ -509,7 +508,7 @@ export const addVoca = async (req, res) => {
     const id = req.params.id
     const topic = await TopicModel.findOne({ _id: id })
 
-    console.log("🚀 ~ addVoca ~ topic:", topic)
+    // console.log("🚀 ~ addVoca ~ topic:", topic)
     
     const { word, meaning } = req.body
     const data = `
@@ -525,7 +524,7 @@ export const addVoca = async (req, res) => {
 
     const msg = `Hoàn thiện thông tin từ vựng (đầy đủ thông tin các trường) theo mẫu json ${data}`
 
-    console.log("🚀 ~ addVoca ~ msg:", msg)
+    // console.log("🚀 ~ addVoca ~ msg:", msg)
     const genAI = new GoogleGenerativeAI(API_KEY)
 
     async function run() {
@@ -540,12 +539,13 @@ export const addVoca = async (req, res) => {
         let jsonString = text.replace(/^[^{]*\{/, '{')
         jsonString = jsonString.replace(/\}[^}]*$/, '}')
         jsonObject = JSON.parse(jsonString)
-        console.log("🚀 ~ run ~ jsonString1:", jsonString)
-        console.log("🚀 ~ run ~ jsonObject1:", jsonObject)
+        // console.log("🚀 ~ run ~ jsonString1:", jsonString)
+        // console.log("🚀 ~ run ~ jsonObject1:", jsonObject)
 
         const newVocabulary = new VocabularyModel({
           word: jsonObject.word,
           pronunciation: jsonObject.pronunciation,
+          difficulty: jsonObject.difficulty,
           meaning: jsonObject.meaning,
           part_of_speech: jsonObject.part_of_speech,
           example: jsonObject.example,
@@ -591,6 +591,7 @@ export const saveSimilarityHistory = async (req, res) => {
 export const saveQuestionHistory = async (req, res) => {
   try {
     const { wordId, value } = req.body
+    // console.log("🚀 ~ saveQuestionHistory ~  wordId, value:", wordId, value)
     const vocabulary = await VocabularyModel.findOne({ _id: wordId })
     vocabulary.questionHistory.push({ value, time: new Date() })
     await vocabulary.save()

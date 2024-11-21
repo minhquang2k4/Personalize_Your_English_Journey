@@ -6,12 +6,13 @@ import { useNavigate } from 'react-router-dom'
 // UI Components
 import Loader from '../loader'
 import Steper from '../stepper'
+import UploadImage from '../uploadImage'
 
 // MUI
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
-import { Button } from '@mui/material'
+import { Button, Divider } from '@mui/material'
 
 const NewTopic = () => {
   const API_URL = import.meta.env.VITE_API_URL
@@ -22,10 +23,15 @@ const NewTopic = () => {
   const [topicName, setTopicName] = useState('')
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     setError(false)
   }, [topicName] )
+
+  const handleOpen = () => {
+    setOpen(true)
+  }
 
   const handleSubmit = async () => {
     if (topicName === '') {
@@ -82,6 +88,7 @@ const NewTopic = () => {
       boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)'
     }} >
       { loading && <Loader /> }
+      <UploadImage open={open} setOpen={setOpen} />
 
       {/* title */}
       <Typography variant='h5' component='div' sx={{
@@ -108,21 +115,46 @@ const NewTopic = () => {
           }
         }} 
         onChange={ (e) => {setTopicName(e.target.value)} }/>
-        <Button variant="contained" 
-          onClick={handleSubmit}
+        <Box
           sx={{
-            width: '140px',
-            height: '45px',
-            borderRadius: '100px',
-            backgroundColor: '#FFD700',
-            transition: 'all 0.3s ease',
-            color: '#000000',
-            '&:hover': {
-              backgroundColor: '#FFA000',
-              transform: 'scale(1.05)'
-            }
-          }}> Tạo Chủ Đề</Button>
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 2
+          }}
+        >
+          <Button variant="contained" 
+            onClick={handleSubmit}
+            sx={{
+              width: '140px',
+              height: '45px',
+              borderRadius: '100px',
+              backgroundColor: '#FFD700',
+              transition: 'all 0.3s ease',
+              color: '#000000',
+              '&:hover': {
+                backgroundColor: '#FFA000',
+                transform: 'scale(1.05)'
+              }}}
+          > Tạo Chủ Đề</Button>
 
+          <Divider orientation="vertical" flexItem sx={{ height: '50px' }} />
+
+          <Button variant="contained" 
+            onClick={handleOpen}
+            sx={{
+              width: '140px',
+              height: '45px',
+              borderRadius: '100px',
+              backgroundColor: '#FFD700',
+              transition: 'all 0.3s ease',
+              color: '#000000',
+              '&:hover': {
+                backgroundColor: '#FFA000',
+                transform: 'scale(1.05)'
+              }}}
+          > Tải Ảnh Lên </Button>
+        </Box>
       </Box>
     </Box>
   )
