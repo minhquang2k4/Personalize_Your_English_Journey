@@ -1,26 +1,24 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 import {
   Box,
   Typography,
   Button,
-  TextField,
   Card,
   CardContent,
   Grid,
   Container,
-  useTheme,
-} from '@mui/material';
-import { Language, Psychology, Book, Rocket } from '@mui/icons-material';
+  useTheme
+} from '@mui/material'
+import { Language, Psychology, Book, Rocket } from '@mui/icons-material'
 
 const HomePage = () => {
-  const theme = useTheme();
-  const navigate = useNavigate();
+  const theme = useTheme()
+  const navigate = useNavigate()
 
   return (
     <Box sx={{
       minHeight: '90vh',
-      backgroundColor: theme.palette.background.default,
+      backgroundColor: theme.palette.background.default
     }}>
       <Container maxWidth="lg">
         {/* Hero Section */}
@@ -43,7 +41,15 @@ const HomePage = () => {
         {/* Features Section */}
         <Grid container spacing={4} sx={{ mt: 4 }}>
           <Grid item xs={12} md={4}>
-            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Card sx={{
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              transition: 'transform 0.3s ease-in-out', 
+              '&:hover': {
+                transform: 'scale(1.05)'
+              }
+            }}>
               <CardContent>
                 <Psychology sx={{ fontSize: 40, color: theme.palette.primary.main, mb: 2 }} />
                 <Typography gutterBottom variant="h5" component="div">
@@ -56,7 +62,15 @@ const HomePage = () => {
             </Card>
           </Grid>
           <Grid item xs={12} md={4}>
-            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Card sx={{
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              transition: 'transform 0.3s ease-in-out', 
+              '&:hover': {
+                transform: 'scale(1.05)'
+              }
+            }}>
               <CardContent>
                 <Book sx={{ fontSize: 40, color: theme.palette.primary.main, mb: 2 }} />
                 <Typography gutterBottom variant="h5" component="div">
@@ -69,7 +83,15 @@ const HomePage = () => {
             </Card>
           </Grid>
           <Grid item xs={12} md={4}>
-            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Card sx={{
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              transition: 'transform 0.3s ease-in-out', 
+              '&:hover': {
+                transform: 'scale(1.05)'
+              }
+            }}>
               <CardContent>
                 <Rocket sx={{ fontSize: 40, color: theme.palette.primary.main, mb: 2 }} />
                 <Typography gutterBottom variant="h5" component="div">
@@ -84,7 +106,7 @@ const HomePage = () => {
         </Grid>
       </Container>
     </Box>
-  );
-};
+  )
+}
 
-export default HomePage;
+export default HomePage
