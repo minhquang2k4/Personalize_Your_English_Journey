@@ -1,8 +1,15 @@
+import AccountComponent from '../components/authComponents/accountComponent.jsx'
+
+import Box from '@mui/material/Box'
+
 const AccountPage = () => {
   return (
-    <div>
-      <h1>Account Page</h1>
-    </div>
+    <Box sx={{
+      padding: '13px',
+      backgroundColor: '#f5f5f5'
+    }}>
+      <AccountComponent />
+    </Box>
   )
 }
 

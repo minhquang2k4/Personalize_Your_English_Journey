@@ -4,9 +4,6 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 import theme from '../theme'
-// import logo from '../assets/Logo.png'
-// import logo2 from '../assets/Logo2.png'
-
 import HomeIcon from '@mui/icons-material/Home'
 import TopicIcon from '@mui/icons-material/Topic'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
@@ -41,7 +38,6 @@ function MasterPage() {
       window.removeEventListener('storage', handleStorageChange)
     }
   }, [])
-
 
   const NAVIGATION1 = [
     {
@@ -93,6 +89,11 @@ function MasterPage() {
           segment: 'account',
           title: 'Tài Khoản',
           icon: <PersonSharpIcon />
+        },
+        {
+          segment: 'practicehistory',
+          title: 'Lịch sử luyện Tập',
+          icon: <InterestsIcon />
         },
         {
           segment: 'logout',

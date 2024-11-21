@@ -41,6 +41,7 @@ export const register = async (req, res) => {
       email: email,
       password: md5(password)
     })
+    // tra ve thong tin nguoi dung
 
     res.status(201).json({ user })
   } catch (error) {
