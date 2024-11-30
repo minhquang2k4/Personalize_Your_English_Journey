@@ -330,7 +330,7 @@ export const create = async (req, res) => {
     user.topicIDs.push(newTopic._id)
     await user.save()
 
-    res.status(201).json({ topicId: newTopic._id })
+    return res.status(201).json({ topicId: newTopic._id })
 
   } catch (error) {
     return res.status(500).json({ message: error.message })
@@ -394,7 +394,7 @@ export const createExam = async (req, res) => {
     ]`
 
     const msg = `Dựa vào data từ vựng sau:${dataJson}.
-    Hãy tạo 1 bộ câu hỏi trắc nhiệm tiếng anh khoảng 30 câu hỏi (đầu ra ở dạng json) cho các từ vựng trên, theo các dạng câu hỏi có 4 đáp án hoặc câu hỏi true false hoặc dạng điền vào chỗ trống theo mẫu json sau: ${resTemplate}`
+    Hãy tạo 1 bộ câu hỏi trắc nhiệm tiếng anh khoảng 15 đến 20 câu hỏi (đầu ra ở dạng json) cho các từ vựng trên, theo các dạng câu hỏi có 4 đáp án hoặc câu hỏi true false hoặc dạng điền vào chỗ trống theo mẫu json sau: ${resTemplate}`
    
     // console.log("🚀 ~ exam ~ msg:", msg)
 
