@@ -215,9 +215,8 @@ export const create = async (req, res) => {
     // let questions = []
 
     async function run() {
-      const model = genAI.getGenerativeModel({ model: "gemini-pro" })
+      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
       const chat = model.startChat()
-
       const result1 = await chat.sendMessage(msg1)
       const response1 = await result1.response
       const text1 = response1.text()
