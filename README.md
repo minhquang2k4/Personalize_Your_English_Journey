@@ -75,6 +75,6 @@ Similarity Percentage = (1 - (Levenshtein Distance / Max Length of Two Strings))
 
 ## 🌟 Slide trình bày
 
-https://www.canva.com/design/DAGQO4HAvuM/8bxUeE5Pu-BQHxO-tM0jBA/edit?utm_content=DAGQO4HAvuM&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+[Slide](https://www.canva.com/design/DAGQO4HAvuM/8bxUeE5Pu-BQHxO-tM0jBA/edit?utm_content=DAGQO4HAvuM&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 ---
